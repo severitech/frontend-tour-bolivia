@@ -1,103 +1,80 @@
-import Image from "next/image";
+import { Navegacion } from "@/components/comunes/navegacion";
+import { FormularioBusqueda } from "@/components/inicio/formulario-busqueda";
+import { DestinosDestacados } from "@/components/inicio/destinos-destacados";
+import { PiePagina } from "@/components/comunes/pie-pagina";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, Waves, Cloud, Mountain } from "lucide-react";
 
-export default function Home() {
+export default function PaginaInicio() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen">
+      <Navegacion />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* HERO */}
+      <section className="relative min-h-[85vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden">
+     
+        <video
+          className="absolute inset-0 h-full w-full object-cover z-0"
+          src="/Video.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          // poster="/poster.jpg"
+        />
+
+        {/* Oscurecimiento suave sobre el video */}
+        <div className="absolute inset-0 bg-black/30 z-10" />
+
+        {/* Elementos animados flotantes (encima) */}
+        {/* <div className="absolute inset-0 pointer-events-none z-20">
+          <Cloud className="absolute top-20 left-10 text-white/20 w-16 h-16 animate-float-slow" />
+          <Cloud className="absolute top-32 right-20 text-white/15 w-20 h-20 animate-float-slower" />
+          <Cloud className="absolute top-40 left-1/3 text-white/10 w-12 h-12 animate-float-fast" />
+          <Waves className="absolute bottom-20 left-16 text-blue-300/30 w-24 h-24 animate-wave" />
+          <Waves className="absolute bottom-32 right-24 text-blue-200/20 w-20 h-20 animate-wave-slow" />
+          <Mountain className="absolute bottom-40 left-1/4 text-amber-300/20 w-32 h-32 animate-float-slower" />
+        </div> */}
+
+        {/* Gradiente superior (si lo quieres más visible, sube opacidades) */}
+        {/* <div className="absolute inset-0 bg-gradient-to-br from-blue-900/60 via-amber-900/40 to-blue-800/70 z-30" /> */}
+
+        {/* Contenido */}
+        <div className="relative z-40 text-center max-w-4xl mx-auto space-y-8">
+          <div className="space-y-4 animate-fade-in-up">
+            <h1 className="font-heading font-black text-4xl sm:text-5xl lg:text-7xl text-white leading-tight drop-shadow-2xl animate-title-glow">
+              Descubre la <span className="text-amber-300 animate-pulse">Magia</span> de Bolivia
+            </h1>
+            <p className="text-lg sm:text-xl lg:text-2xl text-white/95 max-w-3xl mx-auto leading-relaxed drop-shadow-lg animate-fade-in-up-delay">
+              Explora paisajes impresionantes, cultura vibrante y aventuras únicas en el corazón de Sudamérica
+            </p>
+          </div>
+
+          <div className="pt-8 animate-fade-in-up-delay-2">
+            <FormularioBusqueda />
+          </div>
+
+          <div className="pt-6 animate-fade-in-up-delay-3">
+            <Button
+              size="lg"
+              className="bg-amber-500 hover:bg-amber-600 text-white font-bold px-10 py-5 text-lg rounded-xl transition-all duration-500 hover:shadow-2xl hover:shadow-amber-500/50 hover:scale-110 group border-2 border-amber-400 animate-bounce-subtle"
+            >
+              Comienza tu aventura
+              <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-3 group-hover:scale-125 transition-all duration-300" />
+            </Button>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+
+      {/* Estadísticas + resto */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white/95 backdrop-blur-sm">
+        {/* ...tu contenido existente... */}
+      </section>
+
+      <DestinosDestacados />
+      <PiePagina />
     </div>
   );
 }
+
