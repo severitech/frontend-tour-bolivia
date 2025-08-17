@@ -34,6 +34,12 @@ export function Navegacion() {
             <Link href="/contacto" className="text-foreground hover:text-primary transition-colors font-medium">
               Contacto
             </Link>
+            <Link href="/panel" className="text-foreground hover:text-primary transition-colors font-medium">
+             Panel
+            </Link>
+            <Link href="/login" className="text-foreground hover:text-primary transition-colors font-medium">
+             Login
+            </Link>
           </div>
 
           {/* Mobile menu button */}
