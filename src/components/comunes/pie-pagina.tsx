@@ -1,9 +1,50 @@
+"use client"
+
+import type React from "react"
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { MapPin, Phone, Mail, Facebook, Instagram, Twitter } from "lucide-react"
+import { useState } from "react"
+import { toast } from "@/hooks/use-toast"
 
 export function PiePagina() {
+  const [emailNewsletter, setEmailNewsletter] = useState("")
+
+  const manejarSuscripcion = (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!emailNewsletter.trim()) {
+      toast({
+        title: "Email requerido",
+        description: "Por favor ingresa tu email para suscribirte",
+        variant: "destructive",
+      })
+      return
+    }
+
+    if (!/\S+@\S+\.\S+/.test(emailNewsletter)) {
+      toast({
+        title: "Email inválido",
+        description: "Por favor ingresa un email válido",
+        variant: "destructive",
+      })
+      return
+    }
+
+    toast({
+      title: "¡Suscripción exitosa!",
+      description: "Te has suscrito correctamente a nuestro newsletter",
+    })
+
+    setEmailNewsletter("")
+  }
+
+  const abrirRedSocial = (url: string) => {
+    window.open(url, "_blank", "noopener,noreferrer")
+  }
+
   return (
     <footer className="bg-gradient-to-br from-amber-900 to-amber-800 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -21,13 +62,28 @@ export function PiePagina() {
               cultura vibrante y aventuras inolvidables.
             </p>
             <div className="flex space-x-3">
-              <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 p-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-white hover:bg-white/10 p-2"
+                onClick={() => abrirRedSocial("https://facebook.com/descubrebolivia")}
+              >
                 <Facebook className="h-4 w-4" />
               </Button>
-              <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 p-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-white hover:bg-white/10 p-2"
+                onClick={() => abrirRedSocial("https://instagram.com/descubrebolivia")}
+              >
                 <Instagram className="h-4 w-4" />
               </Button>
-              <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 p-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-white hover:bg-white/10 p-2"
+                onClick={() => abrirRedSocial("https://twitter.com/descubrebolivia")}
+              >
                 <Twitter className="h-4 w-4" />
               </Button>
             </div>
@@ -97,15 +153,24 @@ export function PiePagina() {
           <div className="space-y-4">
             <h3 className="font-heading font-bold text-lg">Contacto</h3>
             <div className="space-y-3">
-              <div className="flex items-center space-x-2 text-amber-100 text-sm">
+              <div
+                className="flex items-center space-x-2 text-amber-100 text-sm cursor-pointer hover:text-white transition-colors"
+                onClick={() => window.open("https://maps.google.com/?q=La+Paz+Bolivia", "_blank")}
+              >
                 <MapPin className="h-4 w-4" />
                 <span>La Paz, Bolivia</span>
               </div>
-              <div className="flex items-center space-x-2 text-amber-100 text-sm">
+              <div
+                className="flex items-center space-x-2 text-amber-100 text-sm cursor-pointer hover:text-white transition-colors"
+                onClick={() => window.open("tel:+59121234567", "_self")}
+              >
                 <Phone className="h-4 w-4" />
                 <span>+591 2 123 4567</span>
               </div>
-              <div className="flex items-center space-x-2 text-amber-100 text-sm">
+              <div
+                className="flex items-center space-x-2 text-amber-100 text-sm cursor-pointer hover:text-white transition-colors"
+                onClick={() => window.open("mailto:info@descubrebolivia.com", "_self")}
+              >
                 <Mail className="h-4 w-4" />
                 <span>info@descubrebolivia.com</span>
               </div>
@@ -113,13 +178,18 @@ export function PiePagina() {
 
             <div className="space-y-2">
               <h4 className="font-semibold text-sm">Suscríbete a nuestro newsletter</h4>
-              <div className="flex space-x-2">
+              <form onSubmit={manejarSuscripcion} className="flex space-x-2">
                 <Input
+                  type="email"
                   placeholder="Tu email"
+                  value={emailNewsletter}
+                  onChange={(e) => setEmailNewsletter(e.target.value)}
                   className="bg-white/10 border-white/20 text-white placeholder:text-amber-200 focus:bg-white/20"
                 />
-                <Button className="bg-white text-amber-800 hover:bg-amber-50 font-semibold">Suscribir</Button>
-              </div>
+                <Button type="submit" className="bg-white text-amber-800 hover:bg-amber-50 font-semibold">
+                  Suscribir
+                </Button>
+              </form>
             </div>
           </div>
         </div>

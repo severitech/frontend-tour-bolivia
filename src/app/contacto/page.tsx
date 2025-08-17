@@ -1,3 +1,7 @@
+"use client"
+
+import type React from "react"
+
 import { Navegacion } from "@/components/comunes/navegacion"
 import { PiePagina } from "@/components/comunes/pie-pagina"
 import { Button } from "@/components/ui/button"
@@ -5,8 +9,81 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { MapPin, Phone, Mail, Clock, MessageCircle } from "lucide-react"
+import { useState } from "react"
+import { toast } from "@/hooks/use-toast"
 
 export default function ContactoPage() {
+  const [datosFormulario, setDatosFormulario] = useState({
+    nombre: "",
+    apellido: "",
+    email: "",
+    telefono: "",
+    asunto: "",
+    mensaje: "",
+  })
+
+  const manejarEnvio = (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!datosFormulario.nombre.trim() || !datosFormulario.apellido.trim()) {
+      toast({
+        title: "Campos requeridos",
+        description: "Por favor completa tu nombre y apellido",
+        variant: "destructive",
+      })
+      return
+    }
+
+    if (!datosFormulario.email.trim() || !/\S+@\S+\.\S+/.test(datosFormulario.email)) {
+      toast({
+        title: "Email inválido",
+        description: "Por favor ingresa un email válido",
+        variant: "destructive",
+      })
+      return
+    }
+
+    if (!datosFormulario.asunto || !datosFormulario.mensaje.trim()) {
+      toast({
+        title: "Campos requeridos",
+        description: "Por favor selecciona un asunto y escribe tu mensaje",
+        variant: "destructive",
+      })
+      return
+    }
+
+    toast({
+      title: "¡Mensaje enviado!",
+      description: "Hemos recibido tu mensaje. Te contactaremos pronto.",
+    })
+
+    setDatosFormulario({
+      nombre: "",
+      apellido: "",
+      email: "",
+      telefono: "",
+      asunto: "",
+      mensaje: "",
+    })
+  }
+
+  const contactoDirecto = (tipo: string, valor: string) => {
+    switch (tipo) {
+      case "telefono":
+        window.open(`tel:${valor}`, "_self")
+        break
+      case "whatsapp":
+        window.open(`https://wa.me/${valor.replace(/\D/g, "")}`, "_blank")
+        break
+      case "email":
+        window.open(`mailto:${valor}`, "_self")
+        break
+      case "mapa":
+        window.open("https://maps.google.com/?q=Av.+16+de+Julio+1234+La+Paz+Bolivia", "_blank")
+        break
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-blue-50">
       <Navegacion />
@@ -37,19 +114,31 @@ export default function ContactoPage() {
 
               <Card>
                 <CardContent className="p-6">
-                  <form className="space-y-6">
+                  <form onSubmit={manejarEnvio} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <label htmlFor="firstName" className="text-sm font-medium text-foreground">
                           Nombre *
                         </label>
-                        <Input id="firstName" placeholder="Tu nombre" required />
+                        <Input
+                          id="firstName"
+                          placeholder="Tu nombre"
+                          value={datosFormulario.nombre}
+                          onChange={(e) => setDatosFormulario({ ...datosFormulario, nombre: e.target.value })}
+                          required
+                        />
                       </div>
                       <div className="space-y-2">
                         <label htmlFor="lastName" className="text-sm font-medium text-foreground">
                           Apellido *
                         </label>
-                        <Input id="lastName" placeholder="Tu apellido" required />
+                        <Input
+                          id="lastName"
+                          placeholder="Tu apellido"
+                          value={datosFormulario.apellido}
+                          onChange={(e) => setDatosFormulario({ ...datosFormulario, apellido: e.target.value })}
+                          required
+                        />
                       </div>
                     </div>
 
@@ -57,14 +146,27 @@ export default function ContactoPage() {
                       <label htmlFor="email" className="text-sm font-medium text-foreground">
                         Email *
                       </label>
-                      <Input id="email" type="email" placeholder="tu@email.com" required />
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="tu@email.com"
+                        value={datosFormulario.email}
+                        onChange={(e) => setDatosFormulario({ ...datosFormulario, email: e.target.value })}
+                        required
+                      />
                     </div>
 
                     <div className="space-y-2">
                       <label htmlFor="phone" className="text-sm font-medium text-foreground">
                         Teléfono
                       </label>
-                      <Input id="phone" type="tel" placeholder="+591 123 456 789" />
+                      <Input
+                        id="phone"
+                        type="tel"
+                        placeholder="+591 123 456 789"
+                        value={datosFormulario.telefono}
+                        onChange={(e) => setDatosFormulario({ ...datosFormulario, telefono: e.target.value })}
+                      />
                     </div>
 
                     <div className="space-y-2">
@@ -73,6 +175,8 @@ export default function ContactoPage() {
                       </label>
                       <select
                         id="subject"
+                        value={datosFormulario.asunto}
+                        onChange={(e) => setDatosFormulario({ ...datosFormulario, asunto: e.target.value })}
                         className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20"
                         required
                       >
@@ -90,7 +194,14 @@ export default function ContactoPage() {
                       <label htmlFor="message" className="text-sm font-medium text-foreground">
                         Mensaje *
                       </label>
-                      <Textarea id="message" placeholder="Cuéntanos cómo podemos ayudarte..." rows={5} required />
+                      <Textarea
+                        id="message"
+                        placeholder="Cuéntanos cómo podemos ayudarte..."
+                        rows={5}
+                        value={datosFormulario.mensaje}
+                        onChange={(e) => setDatosFormulario({ ...datosFormulario, mensaje: e.target.value })}
+                        required
+                      />
                     </div>
 
                     <Button
@@ -117,7 +228,10 @@ export default function ContactoPage() {
               <div className="space-y-6">
                 <Card>
                   <CardContent className="p-6">
-                    <div className="flex items-start space-x-4">
+                    <div
+                      className="flex items-start space-x-4 cursor-pointer hover:bg-muted/50 rounded-lg p-2 -m-2 transition-colors"
+                      onClick={() => contactoDirecto("mapa", "")}
+                    >
                       <div className="bg-primary/10 p-3 rounded-lg">
                         <MapPin className="h-6 w-6 text-primary" />
                       </div>
@@ -139,11 +253,18 @@ export default function ContactoPage() {
                       <div className="bg-primary/10 p-3 rounded-lg">
                         <Phone className="h-6 w-6 text-primary" />
                       </div>
-                      <div>
+                      <div className="space-y-2">
                         <h3 className="font-semibold text-foreground mb-1">Teléfonos</h3>
-                        <p className="text-muted-foreground text-sm">
+                        <p
+                          className="text-muted-foreground text-sm cursor-pointer hover:text-primary transition-colors"
+                          onClick={() => contactoDirecto("telefono", "+59121234567")}
+                        >
                           +591 2 123 4567 (Oficina)
-                          <br />
+                        </p>
+                        <p
+                          className="text-muted-foreground text-sm cursor-pointer hover:text-primary transition-colors"
+                          onClick={() => contactoDirecto("whatsapp", "+59178901234")}
+                        >
                           +591 7 890 1234 (WhatsApp)
                         </p>
                       </div>
@@ -157,11 +278,18 @@ export default function ContactoPage() {
                       <div className="bg-primary/10 p-3 rounded-lg">
                         <Mail className="h-6 w-6 text-primary" />
                       </div>
-                      <div>
+                      <div className="space-y-2">
                         <h3 className="font-semibold text-foreground mb-1">Email</h3>
-                        <p className="text-muted-foreground text-sm">
+                        <p
+                          className="text-muted-foreground text-sm cursor-pointer hover:text-primary transition-colors"
+                          onClick={() => contactoDirecto("email", "info@descubrebolivia.com")}
+                        >
                           info@descubrebolivia.com
-                          <br />
+                        </p>
+                        <p
+                          className="text-muted-foreground text-sm cursor-pointer hover:text-primary transition-colors"
+                          onClick={() => contactoDirecto("email", "reservas@descubrebolivia.com")}
+                        >
                           reservas@descubrebolivia.com
                         </p>
                       </div>

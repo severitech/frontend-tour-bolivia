@@ -3,11 +3,13 @@
 import type React from "react"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card } from "@/components/ui/card"
 import { CalendarDays, MapPin, Users, Search } from "lucide-react"
+import { toast } from "@/hooks/use-toast"
 
 export function FormularioBusqueda() {
   const [datosBusqueda, setDatosBusqueda] = useState({
@@ -17,10 +19,42 @@ export function FormularioBusqueda() {
     personas: "2",
   })
 
+  const router = useRouter()
+
   const manejarEnvio = (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Implementar funcionalidad de búsqueda
-    console.log("Buscando con:", datosBusqueda)
+
+    if (!datosBusqueda.ubicacion.trim()) {
+      toast({
+        title: "Campo requerido",
+        description: "Por favor ingresa un destino para buscar",
+        variant: "destructive",
+      })
+      return
+    }
+
+    if (!datosBusqueda.fechaInicio) {
+      toast({
+        title: "Campo requerido",
+        description: "Por favor selecciona una fecha de inicio",
+        variant: "destructive",
+      })
+      return
+    }
+
+    const parametrosBusqueda = new URLSearchParams({
+      destino: datosBusqueda.ubicacion,
+      fechaInicio: datosBusqueda.fechaInicio,
+      fechaFin: datosBusqueda.fechaFin || "",
+      personas: datosBusqueda.personas,
+    })
+
+    toast({
+      title: "Buscando destinos...",
+      description: `Buscando opciones para ${datosBusqueda.personas} persona(s) en ${datosBusqueda.ubicacion}`,
+    })
+
+    router.push(`/destinos?${parametrosBusqueda.toString()}`)
   }
 
   return (

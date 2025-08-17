@@ -29,11 +29,11 @@ export function TarjetaDestino({
     <Card className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white animate-fade-in">
       {/* Imagen */}
       <div className="relative h-64 overflow-hidden">
-        <img
+        {/* <img
           src={urlImagen || "/placeholder.svg?height=256&width=400&query=destino turístico boliviano"}
           alt={nombre}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-        />
+        /> */}
         {precio && (
           <div className="absolute top-4 right-4 bg-amber-500 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
             {precio}

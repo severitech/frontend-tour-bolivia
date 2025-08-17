@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { Users, Star, Calendar } from "lucide-react"
+import Link from "next/link"
 
 const paquetes = [
   {
@@ -13,7 +14,7 @@ const paquetes = [
     descripcion:
       "Recorre los destinos más impresionantes de Bolivia en un viaje completo: Salar de Uyuni, Lago Titicaca, La Paz y más.",
     calificacion: 4.9,
-    imagenUrl: "/placeholder.svg?height=400&width=600",
+    imagenUrl: "/bolivia-tour-uyuni-titicaca.png",
     precio: "Desde $850",
     duracion: "10 días",
     destinos: ["Salar de Uyuni", "Lago Titicaca", "La Paz", "Potosí"],
@@ -26,7 +27,7 @@ const paquetes = [
     descripcion:
       "Para los más aventureros: trekking, escalada, ciclismo de montaña y experiencias únicas en los Andes bolivianos.",
     calificacion: 4.8,
-    imagenUrl: "/placeholder.svg?height=400&width=600",
+    imagenUrl: "/bolivia-andes-trekking.png",
     precio: "Desde $650",
     duracion: "7 días",
     destinos: ["Cordillera Real", "Camino de la Muerte", "Minas de Potosí"],
@@ -39,7 +40,7 @@ const paquetes = [
     descripcion:
       "Sumérgete en la rica cultura boliviana visitando comunidades indígenas, sitios arqueológicos y tradiciones milenarias.",
     calificacion: 4.7,
-    imagenUrl: "/placeholder.svg?height=400&width=600",
+    imagenUrl: "/tiwanaku-community.png",
     precio: "Desde $480",
     duracion: "6 días",
     destinos: ["Tiwanaku", "Copacabana", "Isla del Sol", "Comunidades Aymaras"],
@@ -52,7 +53,7 @@ const paquetes = [
     descripcion:
       "Explora la biodiversidad única de Bolivia en sus parques nacionales: desde la Amazonía hasta los Andes.",
     calificacion: 4.6,
-    imagenUrl: "/placeholder.svg?height=400&width=600",
+    imagenUrl: "/madidi-amazon-rainforest.png",
     precio: "Desde $720",
     duracion: "8 días",
     destinos: ["Parque Madidi", "Parque Amboró", "Reserva Eduardo Avaroa"],
@@ -65,7 +66,7 @@ const paquetes = [
     descripcion:
       "Un viaje culinario por Bolivia descubriendo sabores únicos, mercados locales y técnicas de cocina ancestrales.",
     calificacion: 4.5,
-    imagenUrl: "/placeholder.svg?height=400&width=600",
+    imagenUrl: "/bolivian-food-market-cochabamba.png",
     precio: "Desde $380",
     duracion: "5 días",
     destinos: ["Mercado Central", "Valle de Cochabamba", "Restaurantes típicos"],
@@ -77,7 +78,7 @@ const paquetes = [
     ubicacion: "Destinos románticos",
     descripcion: "Paquete especial para parejas con experiencias románticas en los lugares más hermosos de Bolivia.",
     calificacion: 4.8,
-    imagenUrl: "/placeholder.svg?height=400&width=600",
+    imagenUrl: "/bolivia-honeymoon-sunset.png",
     precio: "Desde $950",
     duracion: "7 días",
     destinos: ["Salar de Uyuni", "Sucre", "Samaipata", "Hoteles boutique"],
@@ -91,7 +92,7 @@ export default function PaginaPaquetes() {
       <Navegacion />
 
       {/* Sección Hero */}
-      <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-primary/10 to-accent/10 animate-slide-up">
+      <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-primary/10 to-accent/10 animate-slide-up z-10">
         <div className="max-w-4xl mx-auto text-center space-y-6">
           <h1 className="font-heading font-black text-4xl sm:text-5xl lg:text-6xl text-foreground animate-fade-in-up">
             Paquetes <span className="text-primary">Turísticos</span>
@@ -104,31 +105,31 @@ export default function PaginaPaquetes() {
       </section>
 
       {/* Grid de Paquetes */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 relative z-20">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {paquetes.map((paquete, index) => (
               <Card
                 key={paquete.id}
-                className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white animate-fade-in-up"
+                className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white animate-fade-in-up relative z-30"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 {/* Imagen */}
-                <div className="relative h-64 overflow-hidden">
+                <div className="relative h-64 overflow-hidden z-10">
                   <img
                     src={paquete.imagenUrl || "/placeholder.svg"}
                     alt={paquete.nombre}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  <div className="absolute top-4 right-4 bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-semibold animate-bounce-in">
+                  <div className="absolute top-4 right-4 bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-semibold animate-bounce-in z-20">
                     {paquete.precio}
                   </div>
-                  <div className="absolute top-4 left-4 bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-semibold animate-bounce-in animation-delay-100">
+                  <div className="absolute top-4 left-4 bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-semibold animate-bounce-in animation-delay-100 z-20">
                     {paquete.duracion}
                   </div>
                 </div>
 
-                <CardContent className="p-6 space-y-4">
+                <CardContent className="p-6 space-y-4 relative z-20">
                   {/* Título */}
                   <h3 className="font-heading font-bold text-xl text-foreground group-hover:text-primary transition-colors">
                     {paquete.nombre}
@@ -169,10 +170,12 @@ export default function PaginaPaquetes() {
                   </div>
 
                   {/* Botón CTA */}
-                  <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold transition-all duration-200 hover:scale-105">
-                    <Calendar className="h-4 w-4 mr-2" />
-                    Ver detalles
-                  </Button>
+                  <Link href={`/paquetes/${paquete.id}`}>
+                    <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold transition-all duration-200 hover:scale-105 relative z-30">
+                      <Calendar className="h-4 w-4 mr-2" />
+                      Ver detalles
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
             ))}
@@ -181,18 +184,20 @@ export default function PaginaPaquetes() {
       </section>
 
       {/* Sección CTA */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-primary/5 to-accent/5 animate-fade-in">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-primary/5 to-accent/5 animate-fade-in relative z-10">
         <div className="max-w-4xl mx-auto text-center space-y-6">
           <h2 className="font-heading font-bold text-3xl text-foreground">¿No encuentras lo que buscas?</h2>
           <p className="text-muted-foreground text-lg">
             Creamos paquetes personalizados según tus intereses, presupuesto y tiempo disponible
           </p>
-          <Button
-            size="lg"
-            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 py-4 hover:scale-105 transition-all duration-200"
-          >
-            Solicitar paquete personalizado
-          </Button>
+          <Link href="/contacto">
+            <Button
+              size="lg"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 py-4 hover:scale-105 transition-all duration-200 relative z-20"
+            >
+              Solicitar paquete personalizado
+            </Button>
+          </Link>
         </div>
       </section>
 
