@@ -57,32 +57,15 @@ export function GaleriaImagenes({ imagenes, titulo }: PropsGaleriaImagenes) {
   return (
     <>
       <div className="relative">
-        <div className="absolute top-4 right-4 z-10 flex gap-2">
-          <Button
-            variant="secondary"
-            size="sm"
-            className="bg-white/90 hover:bg-white text-gray-700 border-0 shadow-lg"
-            onClick={alternarFavorito}
-          >
-            <Heart className={`h-4 w-4 ${esFavorito ? "fill-red-500 text-red-500" : ""}`} />
-          </Button>
-          <Button
-            variant="secondary"
-            size="sm"
-            className="bg-white/90 hover:bg-white text-gray-700 border-0 shadow-lg"
-            onClick={compartir}
-          >
-            <Share2 className="h-4 w-4" />
-          </Button>
-        </div>
+        
 
         <div className="grid grid-cols-4 gap-2 h-96 animate-fade-in">
           {/* Imagen Principal */}
-          <div className="col-span-4 md:col-span-3 relative overflow-hidden rounded-lg cursor-pointer group">
+          <div className="relative col-span-4 overflow-hidden rounded-lg cursor-pointer md:col-span-3 group">
             <img
               src={imagenes[imagenActual] || "/placeholder.svg?height=400&width=600&query=paisaje boliviano"}
               alt={`${titulo} - Imagen ${imagenActual + 1}`}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
               onClick={() => setMostrarLightbox(true)}
             />
             {imagenes.length > 1 && (
@@ -90,24 +73,24 @@ export function GaleriaImagenes({ imagenes, titulo }: PropsGaleriaImagenes) {
                 <Button
                   variant="secondary"
                   size="sm"
-                  className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white border-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute text-white transition-opacity transform -translate-y-1/2 border-0 opacity-0 left-2 top-1/2 bg-black/50 hover:bg-black/70 group-hover:opacity-100"
                   onClick={imagenAnterior}
                 >
-                  <ChevronLeft className="h-4 w-4" />
+                  <ChevronLeft className="w-4 h-4" />
                 </Button>
                 <Button
                   variant="secondary"
                   size="sm"
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white border-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute text-white transition-opacity transform -translate-y-1/2 border-0 opacity-0 right-2 top-1/2 bg-black/50 hover:bg-black/70 group-hover:opacity-100"
                   onClick={siguienteImagen}
                 >
-                  <ChevronRight className="h-4 w-4" />
+                  <ChevronRight className="w-4 h-4" />
                 </Button>
               </>
             )}
           </div>
 
-          <div className="hidden md:flex flex-col gap-2 h-96">
+          <div className="flex-col hidden gap-2 md:flex h-96">
             {imagenes.slice(0, 4).map((imagen, index) => (
               <div
                 key={index}
@@ -120,10 +103,10 @@ export function GaleriaImagenes({ imagenes, titulo }: PropsGaleriaImagenes) {
                 <img
                   src={imagen || `/placeholder.svg?height=100&width=150&query=miniatura paisaje boliviano ${index + 1}`}
                   alt={`${titulo} - Miniatura ${index + 1}`}
-                  className="w-full h-full object-cover"
+                  className="object-cover w-full h-full"
                 />
                 {index === 3 && imagenes.length > 4 && (
-                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center text-white font-semibold text-sm">
+                  <div className="absolute inset-0 flex items-center justify-center text-sm font-semibold text-white bg-black/50">
                     +{imagenes.length - 4}
                   </div>
                 )}
@@ -135,38 +118,38 @@ export function GaleriaImagenes({ imagenes, titulo }: PropsGaleriaImagenes) {
 
       {/* Lightbox */}
       {mostrarLightbox && (
-        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 animate-fade-in">
           <Button
             variant="secondary"
             size="sm"
-            className="absolute top-4 right-4 bg-white/20 hover:bg-white/30 text-white border-0"
+            className="absolute text-white border-0 top-4 right-4 bg-white/20 hover:bg-white/30"
             onClick={() => setMostrarLightbox(false)}
           >
-            <X className="h-4 w-4" />
+            <X className="w-4 h-4" />
           </Button>
           <div className="relative max-w-4xl max-h-full">
             <img
               src={imagenes[imagenActual] || "/placeholder.svg?height=600&width=800&query=paisaje boliviano ampliado"}
               alt={`${titulo} - Imagen ${imagenActual + 1}`}
-              className="max-w-full max-h-full object-contain"
+              className="object-contain max-w-full max-h-full"
             />
             {imagenes.length > 1 && (
               <>
                 <Button
                   variant="secondary"
                   size="sm"
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white border-0"
+                  className="absolute text-white transform -translate-y-1/2 border-0 left-4 top-1/2 bg-white/20 hover:bg-white/30"
                   onClick={imagenAnterior}
                 >
-                  <ChevronLeft className="h-5 w-5" />
+                  <ChevronLeft className="w-5 h-5" />
                 </Button>
                 <Button
                   variant="secondary"
                   size="sm"
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white border-0"
+                  className="absolute text-white transform -translate-y-1/2 border-0 right-4 top-1/2 bg-white/20 hover:bg-white/30"
                   onClick={siguienteImagen}
                 >
-                  <ChevronRight className="h-5 w-5" />
+                  <ChevronRight className="w-5 h-5" />
                 </Button>
               </>
             )}

@@ -1,12 +1,20 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Menu, X } from "lucide-react"
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Menu, X } from "lucide-react";
+import { LoadingLink } from "../EfectoCarga/vista-cargando";
+import { usePathname } from "next/navigation"; // 👈 importamos el hook
 
 export function Navegacion() {
-  const [menuAbierto, setMenuAbierto] = useState(false)
+  const [menuAbierto, setMenuAbierto] = useState(false);
+  const pathname = usePathname();
+
+  // 👇 cuando cambie la ruta, cerramos el menú
+  useEffect(() => {
+    setMenuAbierto(false);
+  }, [pathname]);
 
   return (
     <nav className="bg-white/95 backdrop-blur-sm border-b border-border sticky top-0 z-50">
@@ -15,37 +23,38 @@ export function Navegacion() {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-heading font-black text-lg">B</span>
+              <span className="text-primary-foreground font-heading font-black text-lg">
+                B
+              </span>
             </div>
-            <span className="font-heading font-black text-xl text-foreground">Descubre Bolivia</span>
+            <span className="font-heading font-black text-xl text-foreground">
+              Descubre Bolivia
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="text-foreground hover:text-primary transition-colors font-medium">
-              Inicio
-            </Link>
-            <Link href="/destinos" className="text-foreground hover:text-primary transition-colors font-medium">
-              Destinos
-            </Link>
-            <Link href="/paquetes" className="text-foreground hover:text-primary transition-colors font-medium">
-              Paquetes
-            </Link>
-            <Link href="/contacto" className="text-foreground hover:text-primary transition-colors font-medium">
-              Contacto
-            </Link>
-            <Link href="/panel" className="text-foreground hover:text-primary transition-colors font-medium">
-             Panel
-            </Link>
-            <Link href="/login" className="text-foreground hover:text-primary transition-colors font-medium">
-             Login
-            </Link>
+            <LoadingLink href="/">Inicio</LoadingLink>
+            <LoadingLink href="/destinos">Destinos</LoadingLink>
+            <LoadingLink href="/paquetes">Paquetes</LoadingLink>
+            <LoadingLink href="/contacto">Contacto</LoadingLink>
+            <LoadingLink href="/panel">Panel</LoadingLink>
+            <LoadingLink href="/login">Login</LoadingLink>
           </div>
 
           {/* Mobile menu button */}
           <div className="md:hidden">
-            <Button variant="ghost" size="sm" onClick={() => setMenuAbierto(!menuAbierto)} className="p-2">
-              {menuAbierto ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setMenuAbierto(!menuAbierto)}
+              className="p-2"
+            >
+              {menuAbierto ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
             </Button>
           </div>
         </div>
@@ -54,38 +63,25 @@ export function Navegacion() {
         {menuAbierto && (
           <div className="md:hidden border-t border-border">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              <Link
-                href="/"
-                className="block px-3 py-2 text-foreground hover:text-primary transition-colors font-medium"
-                onClick={() => setMenuAbierto(false)}
-              >
+              <LoadingLink href="/" className="block px-3 py-2">
                 Inicio
-              </Link>
-              <Link
-                href="/destinos"
-                className="block px-3 py-2 text-foreground hover:text-primary transition-colors font-medium"
-                onClick={() => setMenuAbierto(false)}
-              >
+              </LoadingLink>
+              <LoadingLink href="/destinos" className="block px-3 py-2">
                 Destinos
-              </Link>
-              <Link
-                href="/paquetes"
-                className="block px-3 py-2 text-foreground hover:text-primary transition-colors font-medium"
-                onClick={() => setMenuAbierto(false)}
-              >
+              </LoadingLink>
+              <LoadingLink href="/paquetes" className="block px-3 py-2">
                 Paquetes
-              </Link>
-              <Link
-                href="/contacto"
-                className="block px-3 py-2 text-foreground hover:text-primary transition-colors font-medium"
-                onClick={() => setMenuAbierto(false)}
-              >
+              </LoadingLink>
+              <LoadingLink href="/contacto" className="block px-3 py-2">
                 Contacto
-              </Link>
+              </LoadingLink>
+              <LoadingLink href="/login" className="block px-3 py-2">
+                Iniciar Sesión
+              </LoadingLink>
             </div>
           </div>
         )}
       </div>
     </nav>
-  )
+  );
 }

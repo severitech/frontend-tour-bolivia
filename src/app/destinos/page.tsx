@@ -19,7 +19,7 @@ const destinosEjemplo = [
     descripcion:
       "El desierto de sal más grande del mundo, un espejo natural que refleja el cielo creando paisajes surrealistas únicos en el planeta.",
     calificacion: 4.9,
-    imagen: "/placeholder.svg?height=400&width=600",
+    imagen: "https://unsplash.com/es/fotos/una-vista-de-una-ciudad-con-una-montana-al-fondo-zYi1Y3GIDyA",
     precio: "$120",
     duracion: "3 días",
     categoria: "naturaleza",
@@ -195,9 +195,8 @@ export default function PaginaDestinos() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-blue-50">
       <Navegacion />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
+      <div className="px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div className="flex flex-col gap-8 lg:flex-row">
           {/* Barra lateral de filtros */}
           <div className="lg:w-80">
             <FiltrosBusqueda
@@ -226,8 +225,10 @@ export default function PaginaDestinos() {
             >
               {destinosFiltrados.map((destino) =>
                 vistaActual === "grid" ? (
+                  
                   <TarjetaDestino
                     key={destino.id}
+                    id={destino.id}
                     nombre={destino.nombre}
                     ubicacion={destino.ubicacion}
                     descripcion={destino.descripcion}
@@ -239,10 +240,10 @@ export default function PaginaDestinos() {
                     maxPersonas={destino.maxPersonas}
                     precioNumerico={destino.precioNumerico}
                     duracionId={destino.duracionId}
-                  />
-                ) : (
+                  />                 ) : (
                   <ItemListaDestino
                     key={destino.id}
+                    id={destino.id}
                     nombre={destino.nombre}
                     ubicacion={destino.ubicacion}
                     descripcion={destino.descripcion}
@@ -261,13 +262,13 @@ export default function PaginaDestinos() {
 
             {/* Sin resultados */}
             {destinosFiltrados.length === 0 && (
-              <div className="text-center py-16 bg-white rounded-xl shadow-sm border border-amber-200">
+              <div className="py-16 text-center bg-white border shadow-sm rounded-xl border-amber-200">
                 <div className="max-w-md mx-auto">
-                  <h3 className="font-heading font-bold text-2xl text-gray-800 mb-3">No se encontraron destinos</h3>
-                  <p className="text-gray-600 mb-6 text-lg">Intenta ajustar tus filtros para ver más resultados</p>
+                  <h3 className="mb-3 text-2xl font-bold text-gray-800 font-heading">No se encontraron destinos</h3>
+                  <p className="mb-6 text-lg text-gray-600">Intenta ajustar tus filtros para ver más resultados</p>
                   <Button
                     onClick={manejarLimpiarFiltros}
-                    className="bg-amber-500 hover:bg-amber-600 text-white font-semibold px-6 py-3 rounded-lg"
+                    className="px-6 py-3 font-semibold text-white rounded-lg bg-amber-500 hover:bg-amber-600"
                   >
                     Limpiar todos los filtros
                   </Button>

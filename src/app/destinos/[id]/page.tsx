@@ -1,15 +1,25 @@
-"use client"
+"use client";
 
-import { Navegacion } from "@/components/comunes/navegacion"
-import { PiePagina } from "@/components/comunes/pie-pagina"
-import { GaleriaImagenes } from "@/components/detalle/galeria-imagenes"
-import { MapaDestino } from "@/components/detalle/mapa-destino"
-import { SeccionActividades } from "@/components/detalle/seccion-actividades"
-import { SeccionRecomendaciones } from "@/components/detalle/seccion-recomendaciones"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Star, Heart, Share2, Clock, Users, Calendar, MapPin } from "lucide-react"
+import { Navegacion } from "@/components/comunes/navegacion";
+import { PiePagina } from "@/components/comunes/pie-pagina";
+import { GaleriaImagenes } from "@/components/detalle/galeria-imagenes";
+import { MapaDestino } from "@/components/detalle/mapa-destino";
+import { SeccionActividades } from "@/components/detalle/seccion-actividades";
+import { SeccionRecomendaciones } from "@/components/detalle/seccion-recomendaciones";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Star,
+  Heart,
+  Share2,
+  Clock,
+  Users,
+  Calendar,
+  MapPin,
+} from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { toast } from "@/hooks/use-toast";
 
 // Mock data - in a real app this would come from an API
 const obtenerDatosDestino = (id: string) => {
@@ -77,7 +87,12 @@ La experiencia incluye visitas a las islas de cactus milenarios, flamencos rosad
         "Equipo de fotografía",
         "Entrada a parques",
       ],
-      noIncluido: ["Vuelos", "Seguro de viaje", "Propinas", "Bebidas alcohólicas"],
+      noIncluido: [
+        "Vuelos",
+        "Seguro de viaje",
+        "Propinas",
+        "Bebidas alcohólicas",
+      ],
     },
     "lago-titicaca": {
       id: "lago-titicaca",
@@ -184,7 +199,12 @@ El sistema de teleféricos Mi Teleférico ofrece vistas panorámicas espectacula
           icono: "users" as const,
         },
       ],
-      incluido: ["Guía turístico", "Transporte urbano", "Entrada a museos", "Paseo en teleférico"],
+      incluido: [
+        "Guía turístico",
+        "Transporte urbano",
+        "Entrada a museos",
+        "Paseo en teleférico",
+      ],
       noIncluido: ["Comidas", "Propinas", "Compras personales"],
     },
     potosi: {
@@ -235,7 +255,12 @@ La experiencia incluye visitas a las minas activas donde aún trabajan los miner
           icono: "users" as const,
         },
       ],
-      incluido: ["Guía especializado", "Equipo de seguridad para minas", "Transporte local", "Entrada a museos"],
+      incluido: [
+        "Guía especializado",
+        "Equipo de seguridad para minas",
+        "Transporte local",
+        "Entrada a museos",
+      ],
       noIncluido: ["Comidas", "Propinas", "Seguro de viaje"],
     },
     sucre: {
@@ -286,7 +311,12 @@ La experiencia se complementa con visitas a los alrededores, incluyendo el Parqu
           icono: "users" as const,
         },
       ],
-      incluido: ["Guía turístico", "Transporte local", "Entrada a museos", "Entrada al Parque Cretácico"],
+      incluido: [
+        "Guía turístico",
+        "Transporte local",
+        "Entrada a museos",
+        "Entrada al Parque Cretácico",
+      ],
       noIncluido: ["Comidas", "Propinas", "Compras personales"],
     },
     cochabamba: {
@@ -337,13 +367,18 @@ Los alrededores incluyen el Parque Nacional Tunari y pueblos tradicionales donde
           icono: "users" as const,
         },
       ],
-      incluido: ["Guía gastronómico", "Transporte local", "Degustaciones incluidas", "Teleférico al Cristo"],
+      incluido: [
+        "Guía gastronómico",
+        "Transporte local",
+        "Degustaciones incluidas",
+        "Teleférico al Cristo",
+      ],
       noIncluido: ["Comida completa", "Propinas", "Compras personales"],
     },
-  }
+  };
 
-  return destinos[id] || null
-}
+  return destinos[id] || null;
+};
 
 const recomendaciones = [
   {
@@ -386,72 +421,129 @@ const recomendaciones = [
     id: "cochabamba",
     nombre: "Cochabamba",
     ubicacion: "Cochabamba, Bolivia",
-    descripcion: "La ciudad del eterno clima primaveral con deliciosa gastronomía",
+    descripcion:
+      "La ciudad del eterno clima primaveral con deliciosa gastronomía",
     calificacion: 4.4,
     imagenUrl: "/placeholder.svg?height=300&width=400",
     precio: "Desde $50",
   },
-]
+];
 
-export default function PaginaDetalleDestino({ params }: { params: { id: string } }) {
-  const destino = obtenerDatosDestino(params.id)
-  console.log(params)
+export default function PaginaDetalleDestino({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = React.use(params);
+  const destino = obtenerDatosDestino(id);
+  const [esFavorito, setEsFavorito] = useState(false);
+  const [titulo, setTitulo] = useState("");
+  useEffect(() => {
+    if (destino) {
+      setTitulo(destino.nombre);
+    }
+  }, [destino]);
+
   if (!destino) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-blue-50">
         <Navegacion />
-        <div className="max-w-4xl mx-auto px-4 py-16 text-center animate-fade-in">
-          <h1 className="font-heading font-bold text-2xl text-foreground mb-4">Destino no encontrado</h1>
-          <p className="text-muted-foreground">El destino que buscas no existe o ha sido movido.</p>
+        <div className="max-w-4xl px-4 py-16 mx-auto text-center animate-fade-in">
+          <h1 className="mb-4 text-2xl font-bold font-heading text-foreground">
+            Destino no encontrado
+          </h1>
+          <p className="text-muted-foreground">
+            El destino que buscas no existe o ha sido movido.
+          </p>
           <Button className="mt-6" onClick={() => window.history.back()}>
             Volver atrás
           </Button>
         </div>
         <PiePagina />
       </div>
-    )
+    );
   }
 
+  const alternarFavorito = () => {
+    setEsFavorito(!esFavorito);
+    
+    toast({
+      title: esFavorito ? "Eliminado de favoritos" : "Agregado a favoritos",
+      description: esFavorito
+        ? `${titulo} ha sido eliminado de tus favoritos`
+        : `${titulo} ha sido agregado a tus favoritos`,
+    });
+  };
+
+  const compartir = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: titulo,
+          text: `¡Mira este increíble destino en Bolivia: ${titulo}!`,
+          url: window.location.href,
+        });
+      } catch (error) {
+        console.log("Error al compartir:", error);
+      }
+    } else {
+      // Fallback para navegadores que no soportan Web Share API
+      await navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: "Enlace copiado",
+        description: "El enlace ha sido copiado al portapapeles",
+      });
+    }
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-blue-50">
       <Navegacion />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in">
+      <div className="px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8 animate-fade-in">
         <div className="mb-8 animate-slide-up">
-          <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-4">
-            <span className="hover:text-primary cursor-pointer transition-colors">Inicio</span>
+          <div className="flex items-center mb-4 space-x-2 text-sm text-muted-foreground">
+            <span className="transition-colors cursor-pointer hover:text-primary">
+              Inicio
+            </span>
             <span>/</span>
-            <span className="hover:text-primary cursor-pointer transition-colors">Destinos</span>
+            <span className="transition-colors cursor-pointer hover:text-primary">
+              Destinos
+            </span>
             <span>/</span>
-            <span className="text-foreground font-medium">{destino.nombre}</span>
+            <span className="font-medium text-foreground">
+              {destino.nombre}
+            </span>
           </div>
 
-          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
             <div className="space-y-4 animate-fade-in-up">
               <div className="flex items-center space-x-2">
                 <Badge className="bg-primary/10 text-primary border-primary/20 animate-bounce-in">
                   {destino.categoria}
                 </Badge>
-                <Badge variant="outline" className="animate-bounce-in animation-delay-100">
+                <Badge
+                  variant="outline"
+                  className="animate-bounce-in animation-delay-100"
+                >
                   {destino.dificultad}
                 </Badge>
               </div>
 
-              <h1 className="font-heading font-black text-3xl lg:text-4xl text-foreground bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              <h1 className="text-3xl font-black font-heading lg:text-4xl text-foreground bg-gradient-to-r from-primary to-accent bg-clip-text">
                 {destino.nombre}
               </h1>
 
               <div className="flex flex-wrap items-center gap-4 text-muted-foreground">
-                <div className="flex items-center space-x-1 hover:text-primary transition-colors">
-                  <MapPin className="h-4 w-4" />
+                <div className="flex items-center space-x-1 transition-colors hover:text-primary">
+                  <MapPin className="w-4 h-4" />
                   <span>{destino.ubicacion}</span>
                 </div>
-                <div className="flex items-center space-x-1 hover:text-accent transition-colors">
-                  <Clock className="h-4 w-4" />
+                <div className="flex items-center space-x-1 transition-colors hover:text-accent">
+                  <Clock className="w-4 h-4" />
                   <span>{destino.duracion}</span>
                 </div>
-                <div className="flex items-center space-x-1 hover:text-primary transition-colors">
-                  <Users className="h-4 w-4" />
+                <div className="flex items-center space-x-1 transition-colors hover:text-primary">
+                  <Users className="w-4 h-4" />
                   <span>Hasta {destino.maxPersonas} personas</span>
                 </div>
               </div>
@@ -462,31 +554,58 @@ export default function PaginaDetalleDestino({ params }: { params: { id: string 
                     <Star
                       key={i}
                       className={`h-5 w-5 transition-all duration-200 hover:scale-110 ${
-                        i < Math.floor(destino.calificacion) ? "text-amber-400 fill-amber-400" : "text-gray-300"
+                        i < Math.floor(destino.calificacion)
+                          ? "text-amber-400 fill-amber-400"
+                          : "text-gray-300"
                       }`}
                     />
                   ))}
                 </div>
-                <span className="font-semibold text-lg">{destino.calificacion}</span>
-                <span className="text-muted-foreground">({destino.numeroReseñas} reseñas)</span>
+                <span className="text-lg font-semibold">
+                  {destino.calificacion}
+                </span>
+                <span className="text-muted-foreground">
+                  ({destino.numeroReseñas} reseñas)
+                </span>
               </div>
             </div>
 
             <div className="flex items-center space-x-3 animate-fade-in-up animation-delay-300">
               <Button
-                variant="outline"
+                variant="secondary"
                 size="sm"
-                className="hover:scale-105 transition-all duration-200 hover:bg-red-50 hover:border-red-200 bg-transparent"
+                onClick={alternarFavorito}
+                className={`
+    text-gray-700 border-0 bg-white/90
+    shadow-md active:scale-95
+    md:shadow-lg
+    transition-all duration-200
+    hover:bg-white hover:scale-105
+    focus-visible:ring-2 focus-visible:ring-amber-400
+  `}
               >
-                <Heart className="h-4 w-4 mr-2" />
+                <Heart
+                  className={`
+      h-5 w-5 transition-colors
+      ${esFavorito ? "fill-red-500 text-red-500 animate-heartBeat" : ""}
+    `}
+                />{" "}
                 Guardar
               </Button>
+
               <Button
-                variant="outline"
+                variant="secondary"
                 size="sm"
-                className="hover:scale-105 transition-all duration-200 hover:bg-blue-50 hover:border-blue-200 bg-transparent"
+                  className={`
+    text-gray-700 border-0 bg-white/90
+    shadow-md active:scale-95
+    md:shadow-lg
+    transition-all duration-200
+    hover:bg-white hover:scale-105
+    focus-visible:ring-2 focus-visible:ring-amber-400
+  `} onClick={compartir}
               >
-                <Share2 className="h-4 w-4 mr-2" />
+                <Share2 className="w-4 h-4 mr-2" />
                 Compartir
               </Button>
             </div>
@@ -494,25 +613,32 @@ export default function PaginaDetalleDestino({ params }: { params: { id: string 
         </div>
 
         <div className="mb-8 animate-slide-up animation-delay-200">
-          <GaleriaImagenes imagenes={destino.imagenes} titulo={destino.nombre} />
+          <GaleriaImagenes
+            imagenes={destino.imagenes}
+            titulo={destino.nombre}
+          />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-8">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+          <div className="space-y-8 lg:col-span-2">
             {/* Description */}
-            <Card className="animate-fade-in-up animation-delay-300 hover:shadow-lg transition-shadow duration-300">
+            <Card className="transition-shadow duration-300 animate-fade-in-up animation-delay-300 hover:shadow-lg">
               <CardContent className="p-6">
-                <h2 className="font-heading font-bold text-xl mb-4 text-primary">Sobre esta experiencia</h2>
+                <h2 className="mb-4 text-xl font-bold font-heading text-primary">
+                  Sobre esta experiencia
+                </h2>
                 <div className="prose prose-gray max-w-none">
-                  {destino.descripcionCompleta.split("\n\n").map((parrafo: string, index: number) => (
-                    <p
-                      key={index}
-                      className="text-muted-foreground leading-relaxed mb-4 animate-fade-in-up"
-                      style={{ animationDelay: `${400 + index * 100}ms` }}
-                    >
-                      {parrafo}
-                    </p>
-                  ))}
+                  {destino.descripcionCompleta
+                    .split("\n\n")
+                    .map((parrafo: string, index: number) => (
+                      <p
+                        key={index}
+                        className="mb-4 leading-relaxed text-muted-foreground animate-fade-in-up"
+                        style={{ animationDelay: `${400 + index * 100}ms` }}
+                      >
+                        {parrafo}
+                      </p>
+                    ))}
                 </div>
               </CardContent>
             </Card>
@@ -523,41 +649,47 @@ export default function PaginaDetalleDestino({ params }: { params: { id: string 
             </div>
 
             {/* What's Included */}
-            <Card className="animate-fade-in-up animation-delay-600 hover:shadow-lg transition-shadow duration-300">
+            <Card className="transition-shadow duration-300 animate-fade-in-up animation-delay-600 hover:shadow-lg">
               <CardContent className="p-6">
-                <h2 className="font-heading font-bold text-xl mb-4 text-primary">Qué incluye</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <h2 className="mb-4 text-xl font-bold font-heading text-primary">
+                  Qué incluye
+                </h2>
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                   <div className="animate-slide-right">
-                    <h3 className="font-semibold text-green-700 mb-3 flex items-center">
-                      <span className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-2">✓</span>
+                    <h3 className="flex items-center mb-3 font-semibold text-green-700">
+                      <span className="flex items-center justify-center w-6 h-6 mr-2 bg-green-100 rounded-full">
+                        ✓
+                      </span>
                       Incluido
                     </h3>
                     <ul className="space-y-2">
                       {destino.incluido.map((item: string, index: number) => (
                         <li
                           key={index}
-                          className="text-sm text-muted-foreground flex items-center animate-fade-in-up"
+                          className="flex items-center text-sm text-muted-foreground animate-fade-in-up"
                           style={{ animationDelay: `${700 + index * 50}ms` }}
                         >
-                          <span className="w-2 h-2 bg-green-500 rounded-full mr-3" />
+                          <span className="w-2 h-2 mr-3 bg-green-500 rounded-full" />
                           {item}
                         </li>
                       ))}
                     </ul>
                   </div>
                   <div className="animate-slide-left">
-                    <h3 className="font-semibold text-red-700 mb-3 flex items-center">
-                      <span className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center mr-2">✗</span>
+                    <h3 className="flex items-center mb-3 font-semibold text-red-700">
+                      <span className="flex items-center justify-center w-6 h-6 mr-2 bg-red-100 rounded-full">
+                        ✗
+                      </span>
                       No incluido
                     </h3>
                     <ul className="space-y-2">
                       {destino.noIncluido.map((item: string, index: number) => (
                         <li
                           key={index}
-                          className="text-sm text-muted-foreground flex items-center animate-fade-in-up"
+                          className="flex items-center text-sm text-muted-foreground animate-fade-in-up"
                           style={{ animationDelay: `${800 + index * 50}ms` }}
                         >
-                          <span className="w-2 h-2 bg-red-500 rounded-full mr-3" />
+                          <span className="w-2 h-2 mr-3 bg-red-500 rounded-full" />
                           {item}
                         </li>
                       ))}
@@ -570,27 +702,33 @@ export default function PaginaDetalleDestino({ params }: { params: { id: string 
 
           <div className="space-y-6">
             {/* Booking Card */}
-            <Card className="lg:sticky lg:top-6 animate-fade-in-up animation-delay-400 hover:shadow-xl transition-all duration-300 border-2 border-primary/10 z-10 bg-white/95 backdrop-blur-sm">
+            <Card className="z-10 transition-all duration-300 border-2 lg:sticky lg:top-6 animate-fade-in-up animation-delay-400 hover:shadow-xl border-primary/10 bg-white/95 backdrop-blur-sm">
               <CardContent className="p-6">
-                <div className="text-center mb-6 animate-pulse-gentle">
-                  <div className="text-3xl font-heading font-black text-primary mb-1 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                <div className="mb-6 text-center animate-pulse-gentle">
+                  <div className="mb-1 text-3xl font-black font-heading text-primary bg-gradient-to-r from-primary to-accent bg-clip-text">
                     {destino.precio}
                   </div>
-                  <div className="text-sm text-muted-foreground">por persona</div>
+                  <div className="text-sm text-muted-foreground">
+                    por persona
+                  </div>
                 </div>
 
-                <div className="space-y-4 mb-6">
+                <div className="mb-6 space-y-4">
                   <div className="grid grid-cols-2 gap-3">
                     <div className="animate-slide-right">
-                      <label className="text-sm font-medium text-muted-foreground">Fecha</label>
+                      <label className="text-sm font-medium text-muted-foreground">
+                        Fecha
+                      </label>
                       <input
                         type="date"
-                        className="w-full mt-1 px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
+                        className="w-full px-3 py-2 mt-1 transition-all duration-200 border rounded-lg border-border focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                       />
                     </div>
                     <div className="animate-slide-left">
-                      <label className="text-sm font-medium text-muted-foreground">Personas</label>
-                      <select className="w-full mt-1 px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200">
+                      <label className="text-sm font-medium text-muted-foreground">
+                        Personas
+                      </label>
+                      <select className="w-full px-3 py-2 mt-1 transition-all duration-200 border rounded-lg border-border focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary">
                         <option>1 persona</option>
                         <option>2 personas</option>
                         <option>3 personas</option>
@@ -600,12 +738,12 @@ export default function PaginaDetalleDestino({ params }: { params: { id: string 
                   </div>
                 </div>
 
-                <Button className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white font-semibold py-3 mb-3 hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
-                  <Calendar className="h-4 w-4 mr-2" />
+                <Button className="w-full py-3 mb-3 font-semibold text-white transition-all duration-200 shadow-lg bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 hover:scale-105 hover:shadow-xl">
+                  <Calendar className="w-4 h-4 mr-2" />
                   Reservar ahora
                 </Button>
 
-                <div className="text-center text-xs text-muted-foreground animate-fade-in-up animation-delay-600">
+                <div className="text-xs text-center text-muted-foreground animate-fade-in-up animation-delay-600">
                   Reserva sin costo. Cancela hasta 24h antes.
                 </div>
               </CardContent>
@@ -613,7 +751,10 @@ export default function PaginaDetalleDestino({ params }: { params: { id: string 
 
             {/* Map */}
             <div className="animate-fade-in-up animation-delay-500">
-              <MapaDestino ubicacion={destino.ubicacion} coordenadas={destino.coordenadas} />
+              <MapaDestino
+                ubicacion={destino.ubicacion}
+                coordenadas={destino.coordenadas}
+              />
             </div>
           </div>
         </div>
@@ -624,5 +765,5 @@ export default function PaginaDetalleDestino({ params }: { params: { id: string 
       </div>
       <PiePagina />
     </div>
-  )
+  );
 }

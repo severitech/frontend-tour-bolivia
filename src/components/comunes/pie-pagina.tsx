@@ -46,18 +46,18 @@ export function PiePagina() {
   }
 
   return (
-    <footer className="bg-gradient-to-br from-amber-900 to-amber-800 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <footer className="text-white bg-gradient-to-br from-amber-900 to-amber-800">
+      <div className="px-4 py-16 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-                <span className="text-primary font-heading font-black text-lg">B</span>
+              <div className="flex items-center justify-center w-8 h-8 bg-white rounded-lg">
+                <span className="text-lg font-black text-primary font-heading">B</span>
               </div>
-              <span className="font-heading font-black text-xl">Descubre Bolivia</span>
+              <span className="text-xl font-black font-heading">Descubre Bolivia</span>
             </div>
-            <p className="text-amber-100 text-sm leading-relaxed">
+            <p className="text-sm leading-relaxed text-amber-100">
               Tu guía definitiva para explorar los destinos más impresionantes de Bolivia. Descubre paisajes únicos,
               cultura vibrante y aventuras inolvidables.
             </p>
@@ -65,51 +65,51 @@ export function PiePagina() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-white hover:bg-white/10 p-2"
+                className="p-2 text-white hover:bg-white/10"
                 onClick={() => abrirRedSocial("https://facebook.com/descubrebolivia")}
               >
-                <Facebook className="h-4 w-4" />
+                <Facebook className="w-4 h-4" />
               </Button>
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-white hover:bg-white/10 p-2"
+                className="p-2 text-white hover:bg-white/10"
                 onClick={() => abrirRedSocial("https://instagram.com/descubrebolivia")}
               >
-                <Instagram className="h-4 w-4" />
+                <Instagram className="w-4 h-4" />
               </Button>
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-white hover:bg-white/10 p-2"
+                className="p-2 text-white hover:bg-white/10"
                 onClick={() => abrirRedSocial("https://twitter.com/descubrebolivia")}
               >
-                <Twitter className="h-4 w-4" />
+                <Twitter className="w-4 h-4" />
               </Button>
             </div>
           </div>
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h3 className="font-heading font-bold text-lg">Enlaces rápidos</h3>
+            <h3 className="text-lg font-bold font-heading">Enlaces rápidos</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/" className="text-amber-100 hover:text-white transition-colors text-sm">
+                <Link href="/" className="text-sm transition-colors text-amber-100 hover:text-white">
                   Inicio
                 </Link>
               </li>
               <li>
-                <Link href="/destinos" className="text-amber-100 hover:text-white transition-colors text-sm">
+                <Link href="/destinos" className="text-sm transition-colors text-amber-100 hover:text-white">
                   Destinos
                 </Link>
               </li>
               <li>
-                <Link href="/paquetes" className="text-amber-100 hover:text-white transition-colors text-sm">
+                <Link href="/paquetes" className="text-sm transition-colors text-amber-100 hover:text-white">
                   Paquetes
                 </Link>
               </li>
               <li>
-                <Link href="/contacto" className="text-amber-100 hover:text-white transition-colors text-sm">
+                <Link href="/contacto" className="text-sm transition-colors text-amber-100 hover:text-white">
                   Contacto
                 </Link>
               </li>
@@ -118,12 +118,12 @@ export function PiePagina() {
 
           {/* Destinos populares */}
           <div className="space-y-4">
-            <h3 className="font-heading font-bold text-lg">Destinos populares</h3>
+            <h3 className="text-lg font-bold font-heading">Destinos populares</h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   href="/destinos/salar-de-uyuni"
-                  className="text-amber-100 hover:text-white transition-colors text-sm"
+                  className="text-sm transition-colors text-amber-100 hover:text-white"
                 >
                   Salar de Uyuni
                 </Link>
@@ -131,18 +131,18 @@ export function PiePagina() {
               <li>
                 <Link
                   href="/destinos/lago-titicaca"
-                  className="text-amber-100 hover:text-white transition-colors text-sm"
+                  className="text-sm transition-colors text-amber-100 hover:text-white"
                 >
                   Lago Titicaca
                 </Link>
               </li>
               <li>
-                <Link href="/destinos/la-paz" className="text-amber-100 hover:text-white transition-colors text-sm">
+                <Link href="/destinos/la-paz" className="text-sm transition-colors text-amber-100 hover:text-white">
                   La Paz
                 </Link>
               </li>
               <li>
-                <Link href="/destinos/potosi" className="text-amber-100 hover:text-white transition-colors text-sm">
+                <Link href="/destinos/potosi" className="text-sm transition-colors text-amber-100 hover:text-white">
                   Potosí
                 </Link>
               </li>
@@ -151,42 +151,42 @@ export function PiePagina() {
 
           {/* Contact & Newsletter */}
           <div className="space-y-4">
-            <h3 className="font-heading font-bold text-lg">Contacto</h3>
+            <h3 className="text-lg font-bold font-heading">Contacto</h3>
             <div className="space-y-3">
               <div
-                className="flex items-center space-x-2 text-amber-100 text-sm cursor-pointer hover:text-white transition-colors"
+                className="flex items-center space-x-2 text-sm transition-colors cursor-pointer text-amber-100 hover:text-white"
                 onClick={() => window.open("https://maps.google.com/?q=La+Paz+Bolivia", "_blank")}
               >
-                <MapPin className="h-4 w-4" />
+                <MapPin className="w-4 h-4" />
                 <span>La Paz, Bolivia</span>
               </div>
               <div
-                className="flex items-center space-x-2 text-amber-100 text-sm cursor-pointer hover:text-white transition-colors"
+                className="flex items-center space-x-2 text-sm transition-colors cursor-pointer text-amber-100 hover:text-white"
                 onClick={() => window.open("tel:+59121234567", "_self")}
               >
-                <Phone className="h-4 w-4" />
+                <Phone className="w-4 h-4" />
                 <span>+591 2 123 4567</span>
               </div>
               <div
-                className="flex items-center space-x-2 text-amber-100 text-sm cursor-pointer hover:text-white transition-colors"
+                className="flex items-center space-x-2 text-sm transition-colors cursor-pointer text-amber-100 hover:text-white"
                 onClick={() => window.open("mailto:info@descubrebolivia.com", "_self")}
               >
-                <Mail className="h-4 w-4" />
+                <Mail className="w-4 h-4" />
                 <span>info@descubrebolivia.com</span>
               </div>
             </div>
 
             <div className="space-y-2">
-              <h4 className="font-semibold text-sm">Suscríbete a nuestro newsletter</h4>
+              <h4 className="text-sm font-semibold">Suscríbete a nuestro newsletter</h4>
               <form onSubmit={manejarSuscripcion} className="flex space-x-2">
                 <Input
                   type="email"
                   placeholder="Tu email"
                   value={emailNewsletter}
                   onChange={(e) => setEmailNewsletter(e.target.value)}
-                  className="bg-white/10 border-white/20 text-white placeholder:text-amber-200 focus:bg-white/20"
+                  className="text-white bg-white/10 border-white/20 placeholder:text-amber-200 focus:bg-white/20"
                 />
-                <Button type="submit" className="bg-white text-amber-800 hover:bg-amber-50 font-semibold">
+                <Button type="submit" className="font-semibold bg-white text-amber-800 hover:bg-amber-50">
                   Suscribir
                 </Button>
               </form>
@@ -195,13 +195,13 @@ export function PiePagina() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-amber-700 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <div className="text-amber-200 text-sm">© 2024 Descubre Bolivia. Todos los derechos reservados.</div>
-          <div className="flex space-x-6 mt-4 md:mt-0">
-            <Link href="/privacidad" className="text-amber-200 hover:text-white text-sm transition-colors">
+        <div className="flex flex-col items-center justify-between pt-8 mt-12 border-t border-amber-700 md:flex-row">
+          <div className="text-sm text-amber-200">© {new Date().getFullYear()} Descubre Bolivia. Todos los derechos reservados.</div>
+          <div className="flex mt-4 space-x-6 md:mt-0">
+            <Link href="/privacidad" className="text-sm transition-colors text-amber-200 hover:text-white">
               Política de Privacidad
             </Link>
-            <Link href="/terminos" className="text-amber-200 hover:text-white text-sm transition-colors">
+            <Link href="/terminos" className="text-sm transition-colors text-amber-200 hover:text-white">
               Términos de Uso
             </Link>
           </div>

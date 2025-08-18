@@ -65,27 +65,31 @@ const destinosDestacados = [
 ]
 
 export function DestinosDestacados() {
+  
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white/50 to-amber-50/30 relative overflow-hidden">
+    
+    <section className="relative px-4 py-20 overflow-hidden sm:px-6 lg:px-8 bg-gradient-to-b from-white/50 to-amber-50/30">
+     
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-20 left-10 w-32 h-32 bg-amber-200/10 rounded-full animate-float-slow"></div>
-        <div className="absolute top-40 right-20 w-24 h-24 bg-blue-200/10 rounded-full animate-float-slower"></div>
-        <div className="absolute bottom-32 left-1/4 w-20 h-20 bg-amber-300/10 rounded-full animate-float-fast"></div>
+        <div className="absolute w-32 h-32 rounded-full top-20 left-10 bg-amber-200/10 animate-float-slow"></div>
+        <div className="absolute w-24 h-24 rounded-full top-40 right-20 bg-blue-200/10 animate-float-slower"></div>
+        <div className="absolute w-20 h-20 rounded-full bottom-32 left-1/4 bg-amber-300/10 animate-float-fast"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
-        <div className="text-center space-y-4 mb-16 animate-fade-in-up">
-          <h2 className="font-heading font-black text-3xl sm:text-4xl lg:text-5xl text-foreground animate-title-glow">
+      <div className="relative z-10 mx-auto max-w-7xl">
+        <div className="mb-16 space-y-4 text-center animate-fade-in-up">
+          <h2 className="text-3xl font-black font-heading sm:text-4xl lg:text-5xl text-foreground animate-title-glow">
             Destinos <span className="text-primary">Destacados</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed animate-fade-in-up-delay">
+          <p className="max-w-2xl mx-auto text-lg leading-relaxed text-muted-foreground animate-fade-in-up-delay">
             Descubre los lugares más impresionantes de Bolivia, desde paisajes naturales únicos hasta ciudades llenas de
             historia y cultura
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {destinosDestacados.map((destino, index) => (
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {
+          destinosDestacados.map((destino, index) => (
             <div
               key={destino.id}
               className="animate-card-entrance hover-lift"
@@ -107,11 +111,11 @@ export function DestinosDestacados() {
           ))}
         </div>
 
-        <div className="text-center mt-12 animate-fade-in-up-delay-3">
+        <div className="mt-12 text-center animate-fade-in-up-delay-3">
           <Button
             size="lg"
             variant="outline"
-            className="border-primary text-primary hover:bg-primary hover:text-primary-foreground font-semibold px-8 py-3 transition-all duration-300 bg-transparent hover:scale-105 hover:shadow-lg hover:shadow-primary/25"
+            className="px-8 py-3 font-semibold transition-all duration-300 bg-transparent border-primary text-primary hover:bg-primary hover:text-primary-foreground hover:scale-105 hover:shadow-lg hover:shadow-primary/25"
           >
             Ver todos los destinos
           </Button>

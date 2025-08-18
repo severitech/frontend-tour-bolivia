@@ -1,37 +1,41 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Montserrat } from "next/font/google"
-import { Open_Sans } from "next/font/google"
-import "./globals.css"
+import type React from "react";
+import type { Metadata } from "next";
+import { Montserrat } from "next/font/google";
+import { Open_Sans } from "next/font/google";
+import "./globals.css";
+import { LoadingLinkProvider } from "@/components/EfectoCarga/contexto";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-montserrat",
   weight: ["400", "600", "700", "900"],
-})
+});
 
 const openSans = Open_Sans({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-open-sans",
   weight: ["400", "500", "600"],
-})
+});
 
 export const metadata: Metadata = {
   title: "Descubre Bolivia - Turismo y Aventuras",
-  description: "Explora los destinos más impresionantes de Bolivia: Salar de Uyuni, Lago Titicaca, La Paz y más.",
+  description:
+    "Explora los destinos más impresionantes de Bolivia: Salar de Uyuni, Lago Titicaca, La Paz y más.",
   generator: "v0.app",
-}
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="es" className={`${montserrat.variable} ${openSans.variable}`}>
-      <body className="font-sans antialiased">{children}</body>
+      <body className="font-sans antialiased">
+        <LoadingLinkProvider>{children}</LoadingLinkProvider>
+      </body>
     </html>
-  )
+  );
 }
