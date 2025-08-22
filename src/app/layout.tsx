@@ -1,9 +1,8 @@
 import type React from "react";
 import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
-import { Open_Sans } from "next/font/google";
+import { Montserrat, Open_Sans } from "next/font/google";
 import "./globals.css";
-import { LoadingLinkProvider } from "@/components/EfectoCarga/contexto";
+import Providers from "@/components/Providers";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -26,15 +25,11 @@ export const metadata: Metadata = {
   generator: "v0.app",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className={`${montserrat.variable} ${openSans.variable}`}>
       <body className="font-sans antialiased">
-        <LoadingLinkProvider>{children}</LoadingLinkProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
