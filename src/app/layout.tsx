@@ -2,7 +2,10 @@ import type React from "react";
 import type { Metadata } from "next";
 import { Montserrat, Open_Sans } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@/context/AuthContext";
+import { LoadingLinkProvider } from "@/components/EfectoCarga/contexto";
 import Providers from "@/components/Providers";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -27,9 +30,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={`${montserrat.variable} ${openSans.variable}`}>
-      <body className="font-sans antialiased">
-        <Providers>{children}</Providers>
+    <html lang="es" className={`${montserrat.variable} ${openSans.variable} h-full`}>
+      <body className="font-sans antialiased min-h-screen w-full overflow-x-hidden overflow-y-auto">
+        <LoadingLinkProvider>
+          <AuthProvider>
+            <SidebarProvider>
+              <div className="min-h-screen w-full overflow-y-auto">
+                {children}
+              </div>
+            </SidebarProvider>
+          </AuthProvider>
+        </LoadingLinkProvider>
       </body>
     </html>
   );

@@ -1,9 +1,14 @@
 html, body {
   overflow-x: hidden;
-  overflow-y: hidden; /* elimina scroll fantasma */
   margin: 0;
   padding: 0;
   height: 100%;
+}
+
+/* Solo aplicar overflow-y hidden en la página de login */
+.login-page html,
+.login-page body {
+  overflow-y: hidden; /* elimina scroll fantasma solo en login */
 }
 
 /* altura segura para móvil */

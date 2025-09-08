@@ -140,12 +140,27 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    @apply h-full;
+  }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground min-h-screen w-full;
+    margin: 0;
+    padding: 0;
   }
   /* Adding heading font class */
   .font-heading {
     font-family: var(--font-heading);
+  }
+  
+  /* Ensure all sections take full width */
+  #__next {
+    @apply min-h-screen w-full;
+  }
+  
+  /* Asegurar que el scroll funcione con sidebar */
+  .group\/sidebar-wrapper {
+    overflow-y: auto !important;
   }
 }
 
@@ -403,4 +418,5 @@
 html,
 body {
   overflow-x: hidden;
+  overflow-y: auto; /* Permitir scroll vertical */
 }

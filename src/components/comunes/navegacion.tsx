@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { LoadingLink } from "../EfectoCarga/vista-cargando";
 import { usePathname } from "next/navigation"; // 👈 importamos el hook
+import useAuth from "@/hooks/useAuth";
+import { NavUser } from "@/components/nav-user";
 
 export function Navegacion() {
   const [menuAbierto, setMenuAbierto] = useState(false);
@@ -17,8 +19,8 @@ export function Navegacion() {
   }, [pathname]);
 
   return (
-    <nav className="bg-white/95 backdrop-blur-sm border-b border-border sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="bg-white/95 backdrop-blur-sm border-b border-border sticky top-0 z-50 w-full">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
@@ -39,7 +41,15 @@ export function Navegacion() {
             <LoadingLink href="/paquetes">Paquetes</LoadingLink>
             <LoadingLink href="/contacto">Contacto</LoadingLink>
             <LoadingLink href="/panel">Panel</LoadingLink>
-            <LoadingLink href="/login">Login</LoadingLink>
+            {/* Show avatar if logged in, else Login link */}
+            {(() => {
+              const { user } = useAuth();
+              if (user) {
+                return <NavUser />;
+              } else {
+                return <LoadingLink href="/login">Login</LoadingLink>;
+              }
+            })()}
           </div>
 
           {/* Mobile menu button */}
@@ -75,9 +85,18 @@ export function Navegacion() {
               <LoadingLink href="/contacto" className="block px-3 py-2">
                 Contacto
               </LoadingLink>
-              <LoadingLink href="/login" className="block px-3 py-2">
-                Iniciar Sesión
-              </LoadingLink>
+              {(() => {
+                const { user } = useAuth();
+                if (user) {
+                  return <NavUser />;
+                } else {
+                  return (
+                    <LoadingLink href="/login" className="block px-3 py-2">
+                      Iniciar Sesión
+                    </LoadingLink>
+                  );
+                }
+              })()}
             </div>
           </div>
         )}

@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Waves, Cloud, Mountain } from "lucide-react";
 export default function PaginaInicio() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen w-full">
       <Navegacion />
 
       {/* Sección Hero con animaciones */}
-      <section className="relative min-h-[85vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <section className="relative min-h-[85vh] w-full flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden">
         {/* Fondo animado con imagen de playa boliviana */}
 
         <video
@@ -22,6 +22,8 @@ export default function PaginaInicio() {
           playsInline
           preload="auto"
         />
+        {/* Overlay para mejorar legibilidad */}
+        <div className="absolute inset-0 bg-black/40 z-5"></div>
 
         {/* Contenido con animaciones de entrada */}
         <div className="relative z-10 text-center max-w-4xl mx-auto space-y-8">
