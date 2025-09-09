@@ -4,7 +4,18 @@ export const login = async (email: string, password: string) => {
   return api.post("/auth/login/", { email, password });
 };
 
-export const register = async (data: { email: string; password: string; [key: string]: any }) => {
+export const register = async (data: {
+  nombres: string;
+  apellidos: string;
+  email: string;
+  password: string;
+  password_confirm: string;
+  telefono?: string;
+  fecha_nacimiento?: string;
+  genero?: string;
+  documento_identidad?: string;
+  pais?: string;
+}) => {
   return api.post("/auth/register/", data);
 };
 
