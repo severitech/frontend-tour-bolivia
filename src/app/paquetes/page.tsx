@@ -1,207 +1,417 @@
-import { Navegacion } from "@/components/comunes/navegacion"
-import { PiePagina } from "@/components/comunes/pie-pagina"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent } from "@/components/ui/card"
-import { Users, Star, Calendar } from "lucide-react"
-import Link from "next/link"
+"use client";
 
-const paquetes = [
-  {
-    id: "bolivia-completa",
-    nombre: "Bolivia Completa",
-    ubicacion: "Multi-destino",
-    descripcion:
-      "Recorre los destinos más impresionantes de Bolivia en un viaje completo: Salar de Uyuni, Lago Titicaca, La Paz y más.",
-    calificacion: 4.9,
-    imagenUrl: "/bolivia-tour-uyuni-titicaca.png",
-    precio: "Desde $850",
-    duracion: "10 días",
-    destinos: ["Salar de Uyuni", "Lago Titicaca", "La Paz", "Potosí"],
-    maxPersonas: 12,
-  },
-  {
-    id: "aventura-extrema",
-    nombre: "Aventura Extrema",
-    ubicacion: "La Paz - Potosí",
-    descripcion:
-      "Para los más aventureros: trekking, escalada, ciclismo de montaña y experiencias únicas en los Andes bolivianos.",
-    calificacion: 4.8,
-    imagenUrl: "/bolivia-andes-trekking.png",
-    precio: "Desde $650",
-    duracion: "7 días",
-    destinos: ["Cordillera Real", "Camino de la Muerte", "Minas de Potosí"],
-    maxPersonas: 8,
-  },
-  {
-    id: "cultura-ancestral",
-    nombre: "Cultura Ancestral",
-    ubicacion: "Multi-destino",
-    descripcion:
-      "Sumérgete en la rica cultura boliviana visitando comunidades indígenas, sitios arqueológicos y tradiciones milenarias.",
-    calificacion: 4.7,
-    imagenUrl: "/tiwanaku-community.png",
-    precio: "Desde $480",
-    duracion: "6 días",
-    destinos: ["Tiwanaku", "Copacabana", "Isla del Sol", "Comunidades Aymaras"],
-    maxPersonas: 15,
-  },
-  {
-    id: "naturaleza-pura",
-    nombre: "Naturaleza Pura",
-    ubicacion: "Parques Nacionales",
-    descripcion:
-      "Explora la biodiversidad única de Bolivia en sus parques nacionales: desde la Amazonía hasta los Andes.",
-    calificacion: 4.6,
-    imagenUrl: "/madidi-amazon-rainforest.png",
-    precio: "Desde $720",
-    duracion: "8 días",
-    destinos: ["Parque Madidi", "Parque Amboró", "Reserva Eduardo Avaroa"],
-    maxPersonas: 10,
-  },
-  {
-    id: "gastronomia-boliviana",
-    nombre: "Gastronomía Boliviana",
-    ubicacion: "Cochabamba - La Paz",
-    descripcion:
-      "Un viaje culinario por Bolivia descubriendo sabores únicos, mercados locales y técnicas de cocina ancestrales.",
-    calificacion: 4.5,
-    imagenUrl: "/bolivian-food-market-cochabamba.png",
-    precio: "Desde $380",
-    duracion: "5 días",
-    destinos: ["Mercado Central", "Valle de Cochabamba", "Restaurantes típicos"],
-    maxPersonas: 12,
-  },
-  {
-    id: "luna-de-miel",
-    nombre: "Luna de Miel Boliviana",
-    ubicacion: "Destinos románticos",
-    descripcion: "Paquete especial para parejas con experiencias románticas en los lugares más hermosos de Bolivia.",
-    calificacion: 4.8,
-    imagenUrl: "/bolivia-honeymoon-sunset.png",
-    precio: "Desde $950",
-    duracion: "7 días",
-    destinos: ["Salar de Uyuni", "Sucre", "Samaipata", "Hoteles boutique"],
-    maxPersonas: 2,
-  },
-]
+import { Navegacion } from "@/components/comunes/navegacion";
+import { PiePagina } from "@/components/comunes/pie-pagina";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Star,
+  Heart,
+  Share2,
+  Clock,
+  Users,
+  Calendar,
+  MapPin,
+  CheckCircle,
+  XCircle,
+} from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import { useParams } from "next/navigation";
+import { obtenerDatosPaquete } from "@/lib/paquetes";
 
-export default function PaginaPaquetes() {
+export default function PaginaDetallePaquete() {
+  // Normalizamos el id para garantizar string
+  const p = useParams();
+  const id = Array.isArray((p as any).id) ? (p as any).id[0] : ((p as any).id as string);
+
+  const paquete = obtenerDatosPaquete(id);
+
+  const [esFavorito, setEsFavorito] = useState(false);
+  const [titulo, setTitulo] = useState("");
+
+  useEffect(() => {
+    if (paquete) setTitulo(paquete.nombre);
+  }, [paquete]);
+
+  const alternarFavorito = () => {
+    setEsFavorito((prev) => !prev);
+    const agregado = !esFavorito;
+
+    toast({
+      title: agregado ? "Agregado a favoritos" : "Eliminado de favoritos",
+      description: agregado
+        ? `${titulo} ha sido agregado a tus favoritos`
+        : `${titulo} ha sido eliminado de tus favoritos`,
+    });
+  };
+
+  const compartir = async () => {
+    const url = window.location.href;
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: titulo,
+          text: `¡Mira este increíble destino en Bolivia: ${titulo}!`,
+          url,
+        });
+      } else {
+        await navigator.clipboard.writeText(url);
+        toast({
+          title: "Enlace copiado",
+          description: "El enlace ha sido copiado al portapapeles",
+        });
+      }
+    } catch (error) {
+      console.log("Error al compartir:", error);
+    }
+  };
+
+  if (!paquete) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-blue-50">
+        <Navegacion />
+        <div className="max-w-4xl px-4 py-16 mx-auto text-center animate-fade-in">
+          <h1 className="mb-4 text-2xl font-bold font-heading text-foreground">
+            Paquete no encontrado
+          </h1>
+          <p className="text-muted-foreground">
+            El paquete que buscas no existe o ha sido movido.
+          </p>
+          <Button className="mt-6" onClick={() => window.history.back()}>
+            Volver atrás
+          </Button>
+        </div>
+        <PiePagina />
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-blue-50 animate-fade-in">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-blue-50">
       <Navegacion />
 
-      {/* Sección Hero */}
-      <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-primary/10 to-accent/10 animate-slide-up z-10">
-        <div className="max-w-4xl mx-auto text-center space-y-6">
-          <h1 className="font-heading font-black text-4xl sm:text-5xl lg:text-6xl text-foreground animate-fade-in-up">
-            Paquetes <span className="text-primary">Turísticos</span>
-          </h1>
-          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed animate-fade-in-up animation-delay-200">
-            Descubre Bolivia con nuestros paquetes cuidadosamente diseñados para ofrecerte experiencias únicas e
-            inolvidables
-          </p>
-        </div>
-      </section>
+      <div className="px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8 animate-fade-in">
+        {/* Header */}
+        <div className="mb-8 animate-slide-up">
+          <div className="flex items-center mb-4 space-x-2 text-sm text-muted-foreground">
+            <span className="transition-colors cursor-pointer hover:text-primary">Inicio</span>
+            <span>/</span>
+            <span className="transition-colors cursor-pointer hover:text-primary">Paquetes</span>
+            <span>/</span>
+            <span className="font-medium text-foreground">{paquete.nombre}</span>
+          </div>
 
-      {/* Grid de Paquetes */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 relative z-20">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {paquetes.map((paquete, index) => (
-              <Card
-                key={paquete.id}
-                className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white animate-fade-in-up relative z-30"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                {/* Imagen */}
-                <div className="relative h-64 overflow-hidden z-10">
-                  <img
-                    src={paquete.imagenUrl || "/placeholder.svg"}
-                    alt={paquete.nombre}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute top-4 right-4 bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-semibold animate-bounce-in z-20">
-                    {paquete.precio}
-                  </div>
-                  <div className="absolute top-4 left-4 bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-semibold animate-bounce-in animation-delay-100 z-20">
-                    {paquete.duracion}
-                  </div>
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+            <div className="space-y-4 animate-fade-in-up">
+              <div className="flex items-center space-x-2">
+                <Badge className="bg-primary/10 text-primary border-primary/20 animate-bounce-in">
+                  {paquete.categoria}
+                </Badge>
+                <Badge variant="outline" className="animate-bounce-in animation-delay-100">
+                  {paquete.dificultad}
+                </Badge>
+                {paquete.descuento && (
+                  <Badge className="text-white bg-red-500 animate-bounce-in animation-delay-200">
+                    -{paquete.descuento}% OFF
+                  </Badge>
+                )}
+              </div>
+
+              <h1 className="text-3xl font-black font-heading lg:text-4xl text-foreground bg-gradient-to-r from-primary to-accent bg-clip-text">
+                {paquete.nombre}
+              </h1>
+
+              <div className="flex flex-wrap items-center gap-4 text-muted-foreground">
+                <div className="flex items-center space-x-1 transition-colors hover:text-primary">
+                  <MapPin className="w-4 h-4" />
+                  <span>{paquete.ubicacion}</span>
                 </div>
+                <div className="flex items-center space-x-1 transition-colors hover:text-accent">
+                  <Clock className="w-4 h-4" />
+                  <span>{paquete.duracion}</span>
+                </div>
+                <div className="flex items-center space-x-1 transition-colors hover:text-primary">
+                  <Users className="w-4 h-4" />
+                  <span>Hasta {paquete.maxPersonas} personas</span>
+                </div>
+              </div>
 
-                <CardContent className="p-6 space-y-4 relative z-20">
-                  {/* Título */}
-                  <h3 className="font-heading font-bold text-xl text-foreground group-hover:text-primary transition-colors">
-                    {paquete.nombre}
-                  </h3>
+              <div className="flex items-center space-x-2 animate-fade-in-up animation-delay-200">
+                <div className="flex items-center space-x-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`h-5 w-5 transition-all duration-200 hover:scale-110 ${
+                        i < Math.floor(paquete.calificacion)
+                          ? "text-amber-400 fill-amber-400"
+                          : "text-gray-300"
+                      }`}
+                    />
+                  ))}
+                </div>
+                <span className="text-lg font-semibold">{paquete.calificacion}</span>
+                <span className="text-muted-foreground">({paquete.numeroReseñas} reseñas)</span>
+              </div>
+            </div>
 
-                  {/* Descripción */}
-                  <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3">{paquete.descripcion}</p>
+            <div className="flex items-center space-x-3 animate-fade-in-up animation-delay-300">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={alternarFavorito}
+                className="text-gray-700 border-0 bg-white/90 shadow-md active:scale-95 md:shadow-lg transition-all duration-200 hover:bg-white hover:scale-105 focus-visible:ring-2 focus-visible:ring-amber-400"
+              >
+                <Heart
+                  className={`h-5 w-5 transition-colors ${
+                    esFavorito ? "fill-red-500 text-red-500 animate-heartBeat" : ""
+                  }`}
+                />
+                {" "}Guardar
+              </Button>
 
-                  {/* Destinos */}
-                  <div className="space-y-2">
-                    <h4 className="font-semibold text-sm">Incluye:</h4>
-                    <div className="flex flex-wrap gap-1">
-                      {paquete.destinos.slice(0, 3).map((destino, index) => (
-                        <Badge key={index} variant="secondary" className="text-xs">
-                          {destino}
-                        </Badge>
-                      ))}
-                      {paquete.destinos.length > 3 && (
-                        <Badge variant="secondary" className="text-xs">
-                          +{paquete.destinos.length - 3} más
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
+              <Button
+                variant="secondary"
+                size="sm"
+                className="text-gray-700 border-0 bg-white/90 shadow-md active:scale-95 md:shadow-lg transition-all duration-200 hover:bg-white hover:scale-105 focus-visible:ring-2 focus-visible:ring-amber-400"
+                onClick={compartir}
+              >
+                <Share2 className="w-4 h-4 mr-2" />
+                Compartir
+              </Button>
+            </div>
+          </div>
+        </div>
 
-                  {/* Meta Info */}
-                  <div className="flex items-center justify-between text-sm text-muted-foreground">
-                    <div className="flex items-center space-x-4">
-                      <div className="flex items-center">
-                        <Users className="h-4 w-4 mr-1" />
-                        {paquete.maxPersonas} max
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <Star className="h-4 w-4 text-amber-400 fill-amber-400" />
-                        <span>{paquete.calificacion}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Botón CTA */}
-                  <Link href={`/paquetes/${paquete.id}`}>
-                    <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold transition-all duration-200 hover:scale-105 relative z-30">
-                      <Calendar className="h-4 w-4 mr-2" />
-                      Ver detalles
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
+        {/* Image Gallery */}
+        <div className="mb-8 animate-slide-up animation-delay-200">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 h-96">
+            <div className="lg:col-span-2 lg:row-span-2 relative">
+              <Image
+                src={paquete.imagenes[0] || "/placeholder.svg"}
+                alt={paquete.nombre}
+                fill
+                className="object-cover w-full h-full transition-transform duration-300 rounded-lg hover:scale-105"
+              />
+            </div>
+            {paquete.imagenes.slice(1, 5).map((imagen, index) => (
+              <div
+                key={index}
+                className="animate-fade-in-up relative"
+                style={{ animationDelay: `${300 + index * 100}ms` }}
+              >
+                <Image
+                  src={imagen || "/placeholder.svg"}
+                  alt={`${paquete.nombre} ${index + 2}`}
+                  className="object-cover w-full h-full transition-transform duration-300 rounded-lg hover:scale-105"
+                  width={600}
+                  height={400}
+                />
+              </div>
             ))}
           </div>
         </div>
-      </section>
 
-      {/* Sección CTA */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-primary/5 to-accent/5 animate-fade-in relative z-10">
-        <div className="max-w-4xl mx-auto text-center space-y-6">
-          <h2 className="font-heading font-bold text-3xl text-foreground">¿No encuentras lo que buscas?</h2>
-          <p className="text-muted-foreground text-lg">
-            Creamos paquetes personalizados según tus intereses, presupuesto y tiempo disponible
-          </p>
-          <Link href="/contacto">
-            <Button
-              size="lg"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 py-4 hover:scale-105 transition-all duration-200 relative z-20"
-            >
-              Solicitar paquete personalizado
-            </Button>
-          </Link>
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+          {/* Main Content */}
+          <div className="space-y-8 lg:col-span-2">
+            {/* Description */}
+            <Card className="transition-shadow duration-300 animate-fade-in-up animation-delay-300 hover:shadow-lg">
+              <CardContent className="p-6">
+                <h2 className="mb-4 text-xl font-bold font-heading text-primary">Sobre este paquete</h2>
+                <div className="prose prose-gray max-w-none">
+                  {paquete.descripcionCompleta.split("\n\n").map((parrafo, index) => (
+                    <p
+                      key={index}
+                      className="mb-4 leading-relaxed text-muted-foreground animate-fade-in-up"
+                      style={{ animationDelay: `${400 + index * 100}ms` }}
+                    >
+                      {parrafo}
+                    </p>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Destinos incluidos */}
+            <Card className="transition-shadow duration-300 animate-fade-in-up animation-delay-400 hover:shadow-lg">
+              <CardContent className="p-6">
+                <h2 className="mb-4 text-xl font-bold font-heading text-primary">Destinos incluidos</h2>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  {paquete.destinos.map((destino, index) => (
+                    <div
+                      key={index}
+                      className="p-4 transition-shadow border rounded-lg border-border hover:shadow-md animate-fade-in-up"
+                      style={{ animationDelay: `${500 + index * 100}ms` }}
+                    >
+                      <div className="flex items-start justify-between mb-2">
+                        <h3 className="font-semibold text-foreground">{destino.nombre}</h3>
+                        <Badge variant="secondary">{destino.dias} días</Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground">{destino.descripcion}</p>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Itinerario */}
+            <Card className="transition-shadow duration-300 animate-fade-in-up animation-delay-500 hover:shadow-lg">
+              <CardContent className="p-6">
+                <h2 className="mb-4 text-xl font-bold font-heading text-primary">Itinerario detallado</h2>
+                <div className="space-y-4">
+                  {paquete.itinerario.map((dia, index) => (
+                    <div
+                      key={index}
+                      className="pl-4 border-l-4 border-primary/20 animate-fade-in-up"
+                      style={{ animationDelay: `${600 + index * 50}ms` }}
+                    >
+                      <div className="flex items-center mb-2 space-x-2">
+                        <Badge className="bg-primary text-primary-foreground">Día {dia.dia}</Badge>
+                        <h3 className="font-semibold text-foreground">{dia.titulo}</h3>
+                      </div>
+                      <ul className="space-y-1">
+                        {dia.actividades.map((actividad, actIndex) => (
+                          <li key={actIndex} className="flex items-center text-sm text-muted-foreground">
+                            <CheckCircle className="flex-shrink-0 w-3 h-3 mr-2 text-green-500" />
+                            {actividad}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* What's Included */}
+            <Card className="transition-shadow duration-300 animate-fade-in-up animation-delay-600 hover:shadow-lg">
+              <CardContent className="p-6">
+                <h2 className="mb-4 text-xl font-bold font-heading text-primary">Qué incluye</h2>
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                  <div className="animate-slide-right">
+                    <h3 className="flex items-center mb-3 font-semibold text-green-700">
+                      <CheckCircle className="w-5 h-5 mr-2" />
+                      Incluido
+                    </h3>
+                    <ul className="space-y-2">
+                      {paquete.incluido.map((item, index) => (
+                        <li
+                          key={index}
+                          className="flex items-center text-sm text-muted-foreground animate-fade-in-up"
+                          style={{ animationDelay: `${700 + index * 50}ms` }}
+                        >
+                          <CheckCircle className="flex-shrink-0 w-4 h-4 mr-3 text-green-500" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="animate-slide-left">
+                    <h3 className="flex items-center mb-3 font-semibold text-red-700">
+                      <XCircle className="w-5 h-5 mr-2" />
+                      No incluido
+                    </h3>
+                    <ul className="space-y-2">
+                      {paquete.noIncluido.map((item, index) => (
+                        <li
+                          key={index}
+                          className="flex items-center text-sm text-muted-foreground animate-fade-in-up"
+                          style={{ animationDelay: `${800 + index * 50}ms` }}
+                        >
+                          <XCircle className="flex-shrink-0 w-4 h-4 mr-3 text-red-500" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Sidebar */}
+          <div className="space-y-6">
+            <Card className="z-10 transition-all duration-300 border-2 lg:sticky lg:top-6 bg-white/95 backdrop-blur-sm animate-fade-in-up animation-delay-400 hover:shadow-xl border-primary/10">
+              <CardContent className="p-6">
+                <div className="mb-6 text-center">
+                  {paquete.precioOriginal && (
+                    <div className="mb-1 text-lg line-through text-muted-foreground">
+                      {paquete.precioOriginal}
+                    </div>
+                  )}
+                  <div className="mb-1 text-3xl font-black text-transparent font-heading text-primary bg-gradient-to-r from-primary to-accent bg-clip-text animate-pulse-gentle">
+                    {paquete.precio}
+                  </div>
+                  <div className="text-sm text-muted-foreground">por persona</div>
+                  {paquete.descuento && (
+                    <Badge className="mt-2 text-white bg-red-500">¡Ahorra {paquete.descuento}%!</Badge>
+                  )}
+                </div>
+
+                <div className="mb-6 space-y-4">
+                  <div className="animate-slide-right">
+                    <label className="text-sm font-medium text-muted-foreground">Fecha de salida</label>
+                    <select className="w-full px-3 py-2 mt-1 transition-all duration-200 border rounded-lg border-border focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                      <option>Seleccionar fecha</option>
+                      {paquete.fechasDisponibles.map((fecha) => (
+                        <option key={fecha} value={fecha}>
+                          {new Date(fecha).toLocaleDateString("es-ES", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="animate-slide-left">
+                    <label className="text-sm font-medium text-muted-foreground">Número de personas</label>
+                    <select className="w-full px-3 py-2 mt-1 transition-all duration-200 border rounded-lg border-border focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                      <option>1 persona</option>
+                      <option>2 personas</option>
+                      <option>3 personas</option>
+                      <option>4 personas</option>
+                    </select>
+                  </div>
+                </div>
+
+                <Button
+                  className="w-full py-3 mb-3 font-semibold text-white transition-all duration-200 shadow-lg bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 hover:scale-105 hover:shadow-xl"
+                  onClick={() =>
+                    (window.location.href = `/reserva?paquete=${paquete.id}&nombre=${encodeURIComponent(
+                      paquete.nombre
+                    )}&precio=${encodeURIComponent(paquete.precio)}`)
+                  }
+                >
+                  <Calendar className="w-4 h-4 mr-2" />
+                  Reservar paquete
+                </Button>
+
+                <div className="text-xs text-center text-muted-foreground animate-fade-in-up animation-delay-600">
+                  Reserva con solo $100. Paga el resto 30 días antes del viaje.
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="transition-shadow duration-300 animate-fade-in-up animation-delay-500 hover:shadow-lg">
+              <CardContent className="p-6 text-center">
+                <h3 className="mb-2 font-semibold">¿Necesitas ayuda?</h3>
+                <p className="mb-4 text-sm text-muted-foreground">
+                  Nuestros expertos están listos para ayudarte a planificar tu viaje perfecto.
+                </p>
+                <Button variant="outline" className="w-full transition-all duration-200 bg-transparent hover:scale-105">
+                  Contactar asesor
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
         </div>
-      </section>
+      </div>
 
       <PiePagina />
     </div>
-  )
+  );
 }

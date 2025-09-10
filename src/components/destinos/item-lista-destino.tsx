@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Star, MapPin, Clock, Users } from "lucide-react"
 import Link from "next/link"
 import { LoadingLink } from "../EfectoCarga/vista-cargando"
+import Image from "next/image"
 
 interface PropiedadesItemListaDestino {
   id: string
@@ -35,10 +36,11 @@ export function ItemListaDestino({
         <div className="flex flex-col sm:flex-row">
           {/* Image */}
           <div className="relative w-full h-48 overflow-hidden sm:w-80 sm:h-auto">
-            <img
+            <Image
               src={urlImagen || "/placeholder.svg"}
               alt={nombre}
-              className="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
+              layout="fill"
+              objectFit="cover"
             />
             <div className="absolute px-2 py-1 text-xs font-semibold rounded top-3 left-3 bg-primary text-primary-foreground">
               {categoria}

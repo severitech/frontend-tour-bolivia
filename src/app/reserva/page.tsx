@@ -12,13 +12,28 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Calendar, CreditCard, Shield, MapPin, CheckCircle, Phone, Mail, User } from "lucide-react"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
+
+/* ---------- Tipos fuertes para el estado ---------- */
+interface DatosReserva {
+  nombre: string
+  apellido: string
+  email: string
+  telefono: string
+  fechaNacimiento: string
+  numeroPersonas: string
+  fechaSalida: string
+  solicitudesEspeciales: string
+  aceptaTerminos: boolean
+  aceptaMarketing: boolean
+}
 
 export default function PaginaReserva() {
   const searchParams = useSearchParams()
-  const router = useRouter() // Agregado useRouter para navegación sin recarga
-  const [datosReserva, setDatosReserva] = useState({
+  const router = useRouter()
+
+  const [datosReserva, setDatosReserva] = useState<DatosReserva>({
     nombre: "",
     apellido: "",
     email: "",
@@ -34,18 +49,18 @@ export default function PaginaReserva() {
   const [procesandoReserva, setProcesandoReserva] = useState(false)
   const [reservaCompletada, setReservaCompletada] = useState(false)
 
-  const paqueteId = searchParams?.get("paquete") || ""
   const nombrePaquete = searchParams?.get("nombre") || "Paquete seleccionado"
   const precioPaquete = searchParams?.get("precio") || "$0"
 
-  const manejarCambio = (campo: string, valor: string | boolean) => {
-    setDatosReserva((prev) => ({
-      ...prev,
-      [campo]: valor,
-    }))
+  // Fecha mínima para la salida (evita recalcular en cada render)
+  const todayStr = useMemo(() => new Date().toISOString().split("T")[0], [])
+
+  /* ---------- Actualizador tipado por clave ---------- */
+  const manejarCambio = <K extends keyof DatosReserva>(campo: K, valor: DatosReserva[K]) => {
+    setDatosReserva((prev) => ({ ...prev, [campo]: valor }))
   }
 
-  const manejarEnvio = async (e: React.FormEvent) => {
+  const manejarEnvio = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     if (!datosReserva.aceptaTerminos) {
@@ -55,7 +70,7 @@ export default function PaginaReserva() {
 
     setProcesandoReserva(true)
 
-    // Simular procesamiento de reserva
+    // Simula procesamiento
     await new Promise((resolve) => setTimeout(resolve, 2000))
 
     setProcesandoReserva(false)
@@ -231,7 +246,7 @@ export default function PaginaReserva() {
                         value={datosReserva.fechaSalida}
                         onChange={(e) => manejarCambio("fechaSalida", e.target.value)}
                         required
-                        min={new Date().toISOString().split("T")[0]}
+                        min={todayStr}
                         className="focus:ring-2 focus:ring-primary/20"
                       />
                     </div>
@@ -257,7 +272,7 @@ export default function PaginaReserva() {
                     <Checkbox
                       id="terminos"
                       checked={datosReserva.aceptaTerminos}
-                      onCheckedChange={(checked) => manejarCambio("aceptaTerminos", checked as boolean)}
+                      onCheckedChange={(checked) => manejarCambio("aceptaTerminos", Boolean(checked))}
                       className="mt-1"
                     />
                     <Label htmlFor="terminos" className="text-sm leading-relaxed">
@@ -271,7 +286,7 @@ export default function PaginaReserva() {
                     <Checkbox
                       id="marketing"
                       checked={datosReserva.aceptaMarketing}
-                      onCheckedChange={(checked) => manejarCambio("aceptaMarketing", checked as boolean)}
+                      onCheckedChange={(checked) => manejarCambio("aceptaMarketing", Boolean(checked))}
                       className="mt-1"
                     />
                     <Label htmlFor="marketing" className="text-sm leading-relaxed">
@@ -288,7 +303,7 @@ export default function PaginaReserva() {
               >
                 {procesandoReserva ? (
                   <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2" />
                     Procesando reserva...
                   </>
                 ) : (
@@ -328,7 +343,9 @@ export default function PaginaReserva() {
                   <div className="flex justify-between text-lg font-bold border-t pt-2">
                     <span>Total</span>
                     <span className="text-primary">
-                      ${Number.parseInt(precioPaquete.replace("$", "")) * Number.parseInt(datosReserva.numeroPersonas)}
+                      $
+                      {Number.parseFloat(precioPaquete.replace("$", "")) *
+                        Number.parseInt(datosReserva.numeroPersonas)}
                     </span>
                   </div>
                 </div>

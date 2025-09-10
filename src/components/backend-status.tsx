@@ -20,7 +20,7 @@ export function BackendStatus({ className }: BackendStatusProps) {
         // Intentar hacer ping al backend
         await axios.get(apiUrl.replace('/api/', '/health/'), { timeout: 3000 });
         setStatus('online');
-      } catch (error) {
+      } catch {
         // Si no hay endpoint de health, intentar con el endpoint de auth
         try {
           await axios.get(`${apiUrl}auth/`, { timeout: 3000 });

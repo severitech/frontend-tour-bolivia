@@ -2,7 +2,6 @@
 
 import {
   IconCreditCard,
-  IconDotsVertical,
   IconLogout,
   IconNotification,
   IconUserCircle,
@@ -23,17 +22,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "@/components/ui/sidebar"
+import { useSidebar } from "@/components/ui/sidebar";
 
-export function NavUser() {
-  const { user, logout } = useAuth();
+export function NavUser({ user }: { user: { name: string; email: string; avatar: string; roles?: number[]; } }) {
+  const { logout } = useAuth();
   const { isMobile } = useSidebar();
   if (!user) return null;
+
+  // Verificar si el usuario es admin (rol ID 1)
+  const isAdmin = user.roles?.includes(1) || false;
 
   // Solo el primer nombre y la inicial
   const getInitials = (name: string) => {
@@ -82,10 +79,22 @@ export function NavUser() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <IconUserCircle />
-            Account
-          </DropdownMenuItem>
+          {!isAdmin && (
+            <DropdownMenuItem asChild>
+              <a href="/cliente" className="flex items-center gap-2 w-full">
+                <IconUserCircle />
+                Mi Panel
+              </a>
+            </DropdownMenuItem>
+          )}
+          {isAdmin && (
+            <DropdownMenuItem asChild>
+              <a href="/panel?tab=usuarios" className="flex items-center gap-2 w-full">
+                <IconUserCircle />
+                Panel Admin
+              </a>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem>
             <IconCreditCard />
             Billing

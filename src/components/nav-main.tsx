@@ -1,6 +1,11 @@
 "use client";
 
+<<<<<<< HEAD
 import { IconCirclePlusFilled, IconMail, type Icon } from "@tabler/icons-react";
+=======
+import { IconCirclePlusFilled, IconMail, type Icon } from "@tabler/icons-react"
+import Link from "next/link"
+>>>>>>> luis
 
 import { Button } from "@/components/ui/button";
 import {
@@ -44,6 +49,7 @@ export function NavMain({
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>
+<<<<<<< HEAD
           {items.map((item) => (
             <SidebarMenuItem  key={item.title}>
               <LoadingLink key={item.title} href={item.url}>
@@ -54,6 +60,32 @@ export function NavMain({
               </LoadingLink>
             </SidebarMenuItem>
           ))}
+=======
+          {items.map((item) => {
+            // Detectar si el ítem está activo por la ruta actual
+            const isActive = typeof window !== 'undefined' && window.location && window.location.pathname + window.location.search === item.url;
+            return (
+              <SidebarMenuItem key={item.title}>
+                <Link href={item.url} legacyBehavior passHref>
+                  <a style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                    <SidebarMenuButton
+                      tooltip={item.title}
+                      isActive={isActive}
+                      className={
+                        isActive
+                          ? 'bg-orange-500 text-white hover:bg-orange-500 focus:bg-orange-500 active:bg-orange-500 focus-visible:ring-2 focus-visible:ring-orange-700 transition-colors duration-200'
+                          : 'hover:bg-orange-100 hover:text-orange-700 focus:bg-orange-100 focus:text-orange-700 transition-colors duration-200'
+                      }
+                    >
+                      {item.icon && <item.icon />}
+                      <span>{item.title}</span>
+                    </SidebarMenuButton>
+                  </a>
+                </Link>
+              </SidebarMenuItem>
+            );
+          })}
+>>>>>>> luis
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>

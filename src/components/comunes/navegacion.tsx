@@ -16,6 +16,7 @@ import { NavUser } from "@/components/nav-user";
 export function Navegacion() {
   const [menuAbierto, setMenuAbierto] = useState(false);
   const pathname = usePathname();
+  const auth = useAuth(); // Mover el hook fuera del callback
 
   // 👇 cuando cambie la ruta, cerramos el menú
   useEffect(() => {
@@ -55,9 +56,9 @@ export function Navegacion() {
 =======
             {/* Show avatar if logged in, else Login link */}
             {(() => {
-              const { user } = useAuth();
+              const { user } = auth;
               if (user) {
-                return <NavUser />;
+                return <NavUser user={user} />;
               } else {
                 return <LoadingLink href="/login">Login</LoadingLink>;
               }
@@ -99,9 +100,9 @@ export function Navegacion() {
                 Contacto
               </LoadingLink>
               {(() => {
-                const { user } = useAuth();
+                const { user } = auth;
                 if (user) {
-                  return <NavUser />;
+                  return <NavUser user={user} />;
                 } else {
                   return (
                     <LoadingLink href="/login" className="block px-3 py-2">
