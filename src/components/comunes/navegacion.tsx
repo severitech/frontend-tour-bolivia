@@ -6,7 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { LoadingLink } from "../EfectoCarga/vista-cargando";
 import { usePathname } from "next/navigation"; // 👈 importamos el hook
+<<<<<<< HEAD
 import { VariantProps } from 'class-variance-authority';
+=======
+import useAuth from "@/hooks/useAuth";
+import { NavUser } from "@/components/nav-user";
+>>>>>>> 171f9c1774f3a30fedead1597599a46c6e3b6a19
 
 export function Navegacion() {
   const [menuAbierto, setMenuAbierto] = useState(false);
@@ -18,8 +23,13 @@ export function Navegacion() {
   }, [pathname]);
 
   return (
+<<<<<<< HEAD
     <nav className="sticky top-0 z-50 border-b bg-white/95 backdrop-blur-sm border-border">
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+=======
+    <nav className="bg-white/95 backdrop-blur-sm border-b border-border sticky top-0 z-50 w-full">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+>>>>>>> 171f9c1774f3a30fedead1597599a46c6e3b6a19
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
@@ -40,7 +50,19 @@ export function Navegacion() {
             <LoadingLink href="/paquetes">Paquetes</LoadingLink>
             <LoadingLink href="/contacto">Contacto</LoadingLink>
             <LoadingLink href="/panel">Panel</LoadingLink>
+<<<<<<< HEAD
             <LoadingLink href="/login" ><Button className="transition-all duration-200 shadow-md active:scale-95 md:shadow-lg hover:scale-105 focus-visible:ring-2 focus-visible:ring-amber-400 rounded-2xl">Login</Button></LoadingLink>
+=======
+            {/* Show avatar if logged in, else Login link */}
+            {(() => {
+              const { user } = useAuth();
+              if (user) {
+                return <NavUser />;
+              } else {
+                return <LoadingLink href="/login">Login</LoadingLink>;
+              }
+            })()}
+>>>>>>> 171f9c1774f3a30fedead1597599a46c6e3b6a19
           </div>
 
           {/* Mobile menu button */}
@@ -76,9 +98,18 @@ export function Navegacion() {
               <LoadingLink href="/contacto" className="block px-3 py-2">
                 Contacto
               </LoadingLink>
-              <LoadingLink href="/login" className="block px-3 py-2">
-                Iniciar Sesión
-              </LoadingLink>
+              {(() => {
+                const { user } = useAuth();
+                if (user) {
+                  return <NavUser />;
+                } else {
+                  return (
+                    <LoadingLink href="/login" className="block px-3 py-2">
+                      Iniciar Sesión
+                    </LoadingLink>
+                  );
+                }
+              })()}
             </div>
           </div>
         )}
