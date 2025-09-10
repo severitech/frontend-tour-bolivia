@@ -40,13 +40,13 @@ const data = {
   },
   navMain: [
     {
-      title: "Dashboard",
-      url: "#",
+      title: "Panel",
+      url: "/panel",
       icon: IconDashboard,
     },
     {
-      title: "Lifecycle",
-      url: "#",
+      title: "Usuarios",
+      url: "/panel/usuarios",
       icon: IconListDetails,
     },
     {

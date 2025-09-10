@@ -49,7 +49,7 @@ export default function LoginPage() {
           <div className="absolute top-4 left-4">
             <Link href={`/`}>
               <Button className="cursor-pointer">
-                <ArrowLeftFromLine />
+                <ArrowLeftFromLine /> Volver al Inicio
               </Button>
             </Link>
           </div>
@@ -57,7 +57,7 @@ export default function LoginPage() {
           {/* Formulario centrado */}
           <div className="w-full max-w-md p-6 shadow-lg bg-white/80 backdrop-blur-md rounded-xl">
             <h2 className="mb-4 text-2xl font-bold text-center text-gray-900">
-              Bienvenido 👋
+              Bienvenido 
             </h2>
             <LoginForm />
           </div>
@@ -74,14 +74,14 @@ export default function LoginPage() {
           <div className="absolute top-4 left-4">
             <Link href={`/`}>
               <Button className="cursor-pointer">
-                <ArrowLeftFromLine />
+                <ArrowLeftFromLine />Volver al Inicio
               </Button>
             </Link>
           </div>
 
           <div className="relative z-10 flex flex-col items-center form-wrapper">
             <div className="w-full max-w-md form-box">
-              <h2 className="form-title">Bienvenido 👋</h2>
+              <h2 className="form-title">Bienvenido </h2>
               <LoginForm />
             </div>
           </div>

@@ -28,12 +28,13 @@ export function LoadingLink({ href, children, className, onClick }: LoadingLinkP
   return (
     <Link
       href={href}
+      
       onClick={handleClick}
       className={`relative flex items-center gap-2 ${className}`}
     >
       {children}
       {isActive && (
-        <span className="w-4 h-4 border-2 border-t-transparent border-primary rounded-full animate-spin"></span>
+        <span className="w-4 h-4 border-2 rounded-full border-t-transparent border-primary animate-spin"></span>
       )}
     </Link>
   )
