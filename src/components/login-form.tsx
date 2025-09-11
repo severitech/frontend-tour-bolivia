@@ -3,34 +3,45 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import useAuth from "@/hooks/useAuth";
 
 export function LoginForm({ className, ...props }: React.ComponentProps<"form">) {
-  const { login } = useAuth();
+  const { login, user, loading, reloadUser } = useAuth();
   const router = useRouter();
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loadingForm, setLoadingForm] = useState(false);
+  const [redirectPending, setRedirectPending] = useState(false);
+
+  useEffect(() => {
+    if (redirectPending && !loading && user) {
+      // Todos los usuarios van al inicio, independientemente del rol
+      router.push("/");
+      setRedirectPending(false);
+    }
+  }, [redirectPending, loading, user, router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
-    if (id === "login-email") setForm(f => ({ ...f, email: value }));
-    else if (id === "login-password") setForm(f => ({ ...f, password: value }));
+    const safeValue = value || ""; // Ensure value is always a string
+    if (id === "login-email") setForm(f => ({ ...f, email: safeValue }));
+    else if (id === "login-password") setForm(f => ({ ...f, password: safeValue }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setLoadingForm(true);
     setError("");
     const res = await login(form.email, form.password);
+    await reloadUser();
     if (res.success) {
-      router.push("/");
+      setRedirectPending(true);
     } else {
-      setError(res.message);
+      setError(res.message || "Ha ocurrido un error desconocido");
     }
-    setLoading(false);
+    setLoadingForm(false);
   };
 
   return (
@@ -58,8 +69,8 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
           </div>
               <Input id="login-password" type="password" value={form.password} onChange={handleChange} required />
         </div>
-        <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? "Ingresando..." : "Ingresar"}
+        <Button type="submit" className="w-full" disabled={loadingForm}>
+          {loadingForm ? "Ingresando..." : "Ingresar"}
         </Button>
         {error && <div className="text-red-500 text-center text-sm">{error}</div>}
       </div>

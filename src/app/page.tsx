@@ -3,7 +3,7 @@ import { FormularioBusqueda } from "@/components/inicio/formulario-busqueda";
 import { DestinosDestacados } from "@/components/inicio/destinos-destacados";
 import { PiePagina } from "@/components/comunes/pie-pagina";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Waves, Cloud, Mountain } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 export default function PaginaInicio() {
   return (
     <div className="min-h-screen w-full">

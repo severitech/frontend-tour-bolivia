@@ -2,8 +2,8 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight, X, Heart, Share2 } from "lucide-react"
-import { toast } from "@/hooks/use-toast"
+import { ChevronLeft, ChevronRight, X } from "lucide-react"
+import Image from "next/image"
 
 interface PropsGaleriaImagenes {
   imagenes: string[]
@@ -13,7 +13,6 @@ interface PropsGaleriaImagenes {
 export function GaleriaImagenes({ imagenes, titulo }: PropsGaleriaImagenes) {
   const [imagenActual, setImagenActual] = useState(0)
   const [mostrarLightbox, setMostrarLightbox] = useState(false)
-  const [esFavorito, setEsFavorito] = useState(false)
 
   const siguienteImagen = () => {
     setImagenActual((prev) => (prev + 1) % imagenes.length)
@@ -21,37 +20,6 @@ export function GaleriaImagenes({ imagenes, titulo }: PropsGaleriaImagenes) {
 
   const imagenAnterior = () => {
     setImagenActual((prev) => (prev - 1 + imagenes.length) % imagenes.length)
-  }
-
-  const alternarFavorito = () => {
-    setEsFavorito(!esFavorito)
-    toast({
-      title: esFavorito ? "Eliminado de favoritos" : "Agregado a favoritos",
-      description: esFavorito
-        ? `${titulo} ha sido eliminado de tus favoritos`
-        : `${titulo} ha sido agregado a tus favoritos`,
-    })
-  }
-
-  const compartir = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: titulo,
-          text: `¡Mira este increíble destino en Bolivia: ${titulo}!`,
-          url: window.location.href,
-        })
-      } catch (error) {
-        console.log("Error al compartir:", error)
-      }
-    } else {
-      // Fallback para navegadores que no soportan Web Share API
-      await navigator.clipboard.writeText(window.location.href)
-      toast({
-        title: "Enlace copiado",
-        description: "El enlace ha sido copiado al portapapeles",
-      })
-    }
   }
 
   return (
@@ -62,10 +30,12 @@ export function GaleriaImagenes({ imagenes, titulo }: PropsGaleriaImagenes) {
         <div className="grid grid-cols-4 gap-2 h-96 animate-fade-in">
           {/* Imagen Principal */}
           <div className="relative col-span-4 overflow-hidden rounded-lg cursor-pointer md:col-span-3 group">
-            <img
+            <Image
               src={imagenes[imagenActual] || "/placeholder.svg?height=400&width=600&query=paisaje boliviano"}
               alt={`${titulo} - Imagen ${imagenActual + 1}`}
               className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
+              width={600}
+              height={400}
               onClick={() => setMostrarLightbox(true)}
             />
             {imagenes.length > 1 && (
@@ -100,10 +70,12 @@ export function GaleriaImagenes({ imagenes, titulo }: PropsGaleriaImagenes) {
                 style={{ minHeight: "88px" }}
                 onClick={() => setImagenActual(index)}
               >
-                <img
+                <Image
                   src={imagen || `/placeholder.svg?height=100&width=150&query=miniatura paisaje boliviano ${index + 1}`}
                   alt={`${titulo} - Miniatura ${index + 1}`}
                   className="object-cover w-full h-full"
+                  width={150}
+                  height={100}
                 />
                 {index === 3 && imagenes.length > 4 && (
                   <div className="absolute inset-0 flex items-center justify-center text-sm font-semibold text-white bg-black/50">
@@ -128,10 +100,12 @@ export function GaleriaImagenes({ imagenes, titulo }: PropsGaleriaImagenes) {
             <X className="w-4 h-4" />
           </Button>
           <div className="relative max-w-4xl max-h-full">
-            <img
+            <Image
               src={imagenes[imagenActual] || "/placeholder.svg?height=600&width=800&query=paisaje boliviano ampliado"}
               alt={`${titulo} - Imagen ${imagenActual + 1}`}
               className="object-contain max-w-full max-h-full"
+              width={800}
+              height={600}
             />
             {imagenes.length > 1 && (
               <>

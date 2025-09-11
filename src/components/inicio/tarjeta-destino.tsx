@@ -1,8 +1,8 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Star, MapPin } from "lucide-react";
-import Link from "next/link";
 import { LoadingLink } from "../EfectoCarga/vista-cargando";
+import Image from "next/image";
 
 interface PropsTarjetaDestino {
   id: string;
@@ -13,6 +13,7 @@ interface PropsTarjetaDestino {
   urlImagen: string;
   precio?: string;
   reseñas?: number;
+  duracion?: string; // Nueva propiedad agregada
 }
 
 export function TarjetaDestino({
@@ -32,9 +33,10 @@ export function TarjetaDestino({
     <Card className="overflow-hidden transition-all duration-300 bg-white border-0 shadow-lg group hover:shadow-xl hover:-translate-y-1 animate-fade-in">
       {/* Imagen */}
       <div className="relative h-64 overflow-hidden">
-        <img
+        <Image
           src={urlImagen || "/placeholder.svg?height=256&width=400&query=destino turístico boliviano"}
           alt={nombre}
+          layout="fill"
           className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
         />
         {precio && (

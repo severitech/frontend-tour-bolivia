@@ -21,9 +21,36 @@ import {
 import React, { useEffect, useState } from "react";
 import { toast } from "@/hooks/use-toast";
 
+// Definimos un tipo específico para los destinos
+interface Destino {
+  id: string;
+  nombre: string;
+  ubicacion: string;
+  descripcionCorta: string;
+  descripcionCompleta: string;
+  calificacion: number;
+  numeroReseñas: number;
+  precio: string;
+  duracion: string;
+  maxPersonas: number;
+  dificultad: string;
+  categoria: string;
+  imagenes: string[];
+  coordenadas: { lat: number; lng: number };
+  actividades: {
+    id: string;
+    nombre: string;
+    duracion: string;
+    dificultad: "Fácil" | "Moderado" | "Difícil";
+    icono: "camera" | "users" | "utensils";
+  }[];
+  incluido: string[];
+  noIncluido: string[];
+}
+
 // Mock data - in a real app this would come from an API
-const obtenerDatosDestino = (id: string) => {
-  const destinos: Record<string, any> = {
+const obtenerDatosDestino = (id: string): Destino | undefined => {
+  const destinos: Record<string, Destino> = {
     "salar-de-uyuni": {
       id: "salar-de-uyuni",
       nombre: "Salar de Uyuni",
@@ -377,7 +404,7 @@ Los alrededores incluyen el Parque Nacional Tunari y pueblos tradicionales donde
     },
   };
 
-  return destinos[id] || null;
+  return destinos[id];
 };
 
 const recomendaciones = [

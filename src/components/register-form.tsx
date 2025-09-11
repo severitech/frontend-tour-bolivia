@@ -87,7 +87,7 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"form
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleSelectChange = (name: string, value: string) => {
+  const handleSelectChange = (name: keyof FormData, value: string) => {
     setForm((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
@@ -119,21 +119,28 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"form
         documento_identidad: "",
         pais: "",
       });
-    } catch (err: any) {
-      if (err?.code === "ERR_NETWORK" || err?.message?.includes("Network Error")) {
+    } catch (err: unknown) {
+      const e = err as {
+        code?: string;
+        message?: string;
+        response?: { data?: Record<string, unknown> };
+      };
+
+      if (e?.code === "ERR_NETWORK" || (typeof e?.message === "string" && e.message.includes("Network Error"))) {
         setErrors({
-          general: "❌ No se puede conectar al servidor. Asegúrate de que el backend esté ejecutándose en http://127.0.0.1:8000",
+          general:
+            "❌ No se puede conectar al servidor. Asegúrate de que el backend esté ejecutándose en http://127.0.0.1:8000",
         });
-      } else if (err?.response?.data) {
-        const backendErrors = err.response.data;
+      } else if (e?.response?.data) {
+        const backendErrors = e.response.data as Record<string, unknown>;
         const newErrors: FormErrors = {};
-        Object.keys(backendErrors).forEach((key) => {
-          if (Array.isArray(backendErrors[key])) {
-            newErrors[key] = backendErrors[key][0];
+        Object.entries(backendErrors).forEach(([key, val]) => {
+          if (Array.isArray(val) && val.length > 0) {
+            newErrors[key] = String(val[0]);
           } else if (key === "non_field_errors") {
-            newErrors["general"] = Array.isArray(backendErrors[key]) ? backendErrors[key][0] : backendErrors[key];
-          } else {
-            newErrors[key] = backendErrors[key];
+            newErrors.general = Array.isArray(val) ? String(val[0]) : String(val);
+          } else if (val !== undefined && val !== null) {
+            newErrors[key] = String(val);
           }
         });
         setErrors(newErrors);

@@ -1,10 +1,10 @@
 import type React from "react";
+import { Toaster } from "@/components/ui/toaster";
 import type { Metadata } from "next";
 import { Montserrat, Open_Sans } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { LoadingLinkProvider } from "@/components/EfectoCarga/contexto";
-import Providers from "@/components/Providers";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
 const montserrat = Montserrat({
@@ -36,6 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <AuthProvider>
             <SidebarProvider>
               <div className="min-h-screen w-full overflow-y-auto">
+                <Toaster />
                 {children}
               </div>
             </SidebarProvider>
