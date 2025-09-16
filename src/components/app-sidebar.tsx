@@ -41,7 +41,6 @@ const data = {
     avatar: "/avatars/user.jpg",
   },
   navMain: [
-<<<<<<< HEAD
     {
       title: "Panel",
       url: "/panel",
@@ -67,14 +66,12 @@ const data = {
       url: "#",
       icon: IconUsers,
     },
-=======
     { title: "Dashboard", url: "/panel", icon: IconDashboard },
     { title: "Gestión de usuarios", url: "/panel?tab=usuarios", icon: IconUsers },
     { title: "Lifecycle", url: "#", icon: IconListDetails },
     { title: "Analytics", url: "#", icon: IconChartBar },
     { title: "Projects", url: "#", icon: IconFolder },
     { title: "Team", url: "#", icon: IconUsers },
->>>>>>> luis
   ],
   navClouds: [
     {
