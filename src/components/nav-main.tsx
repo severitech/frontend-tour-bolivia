@@ -1,11 +1,8 @@
 "use client";
 
-<<<<<<< HEAD
 import { IconCirclePlusFilled, IconMail, type Icon } from "@tabler/icons-react";
-=======
 import { IconCirclePlusFilled, IconMail, type Icon } from "@tabler/icons-react"
 import Link from "next/link"
->>>>>>> luis
 
 import { Button } from "@/components/ui/button";
 import {
@@ -49,7 +46,6 @@ export function NavMain({
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>
-<<<<<<< HEAD
           {items.map((item) => (
             <SidebarMenuItem  key={item.title}>
               <LoadingLink key={item.title} href={item.url}>
@@ -60,7 +56,6 @@ export function NavMain({
               </LoadingLink>
             </SidebarMenuItem>
           ))}
-=======
           {items.map((item) => {
             // Detectar si el ítem está activo por la ruta actual
             const isActive = typeof window !== 'undefined' && window.location && window.location.pathname + window.location.search === item.url;
@@ -85,7 +80,6 @@ export function NavMain({
               </SidebarMenuItem>
             );
           })}
->>>>>>> luis
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
