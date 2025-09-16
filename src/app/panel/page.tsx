@@ -10,7 +10,6 @@ import { useSearchParams } from "next/navigation";
 import AdminDashboard from "@/components/admin-dashboard";
 
 import data from "./data.json";
-import DashboardLayout from "./layout";
 
 export default function Page() {
   const searchParams = useSearchParams();

@@ -2,7 +2,7 @@ import React from "react";
 // ... (puedes pegar aquí el HTML/JSX que enviaste antes, adaptado a TSX si es necesario)
 
 
-import { Users, Edit, Trash2, UserPlus, Eye, EyeOff, Shield, MapPin, Calendar, Star, LogOut } from 'lucide-react';
+import { Users, Edit, Trash2, UserPlus, EyeOff, Shield, MapPin, Star } from 'lucide-react';
 import { useState } from 'react';
 import { ChartAreaInteractive } from "./chart-area-interactive";
 
@@ -45,7 +45,7 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
-  const { logout } = useAuth();
+  // const { logout } = useAuth();
   const [filterRole, setFilterRole] = useState("todos");
   const [filterStatus, setFilterStatus] = useState("todos");
   const [searchTerm, setSearchTerm] = useState("");

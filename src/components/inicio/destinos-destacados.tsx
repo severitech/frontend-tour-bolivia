@@ -104,7 +104,7 @@ export function DestinosDestacados() {
                 ubicacion={destino.ubicacion}
                 descripcion={destino.descripcion}
                 calificacion={destino.calificacion}
-                urlImagen={destino.imagen}
+                imagen={destino.imagen}
                 precio={destino.precio}
               />
             </div>

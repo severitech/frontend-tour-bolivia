@@ -56,21 +56,57 @@ interface Paquete {
 // Mock data para paquetes detallados (rellena tu mock aquí)
 const obtenerDatosPaquete = (id: string): Paquete | undefined => {
   const paquetes: Record<string, Paquete> = {
-    // "1": { ... },
-    // "2": { ... },
+    "1": {
+      id: "1",
+      nombre: "Paquete A",
+      ubicacion: "Bolivia",
+      descripcionCorta: "Descripción corta del paquete A",
+      descripcionCompleta: "Descripción completa del paquete A",
+      calificacion: 4.5,
+      numeroReseñas: 25,
+      precio: "$200",
+      precioOriginal: "$250",
+      duracion: "5 días",
+      maxPersonas: 10,
+      dificultad: "Media",
+      categoria: "Aventura",
+      imagenes: ["/img1.jpg", "/img2.jpg"],
+      destinos: [{ nombre: "Destino A", dias: 2, descripcion: "Descripción del destino A" }],
+      itinerario: [{ dia: 1, titulo: "Inicio", actividades: ["Actividad 1"] }],
+      incluido: ["Transporte", "Alojamiento"],
+      noIncluido: ["Comidas"],
+      fechasDisponibles: ["2023-12-01", "2023-12-15"],
+      descuento: 10,
+    },
+    // Otros paquetes aquí
   };
   return paquetes[id];
 };
 
+interface PaqueteParams {
+  id: string; // Aseguramos que 'id' siempre sea un string
+}
+
 export default function PaginaDetallePaquete() {
-  // Normalizamos el id para garantizar string
-  const p = useParams();
-  const id = Array.isArray((p as any).id) ? (p as any).id[0] : (p as any).id as string;
-
-  const paquete = obtenerDatosPaquete(id);
-
+  const { id } = useParams<PaqueteParams>(); 
   const [esFavorito, setEsFavorito] = useState(false);
   const [titulo, setTitulo] = useState("");
+  const [selectedFecha, setSelectedFecha] = useState("");
+  const [selectedPersonas, setSelectedPersonas] = useState("1");
+  const [paquete, setPaquete] = useState<Paquete | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = obtenerDatosPaquete(id); // Aquí asumo que tienes esta función disponible
+        setPaquete(data);
+      } catch (error) {
+        console.error("Error al obtener los datos del paquete:", error);
+      }
+    };
+
+    fetchData();
+  }, [id]);
 
   useEffect(() => {
     if (paquete) setTitulo(paquete.nombre);
@@ -107,6 +143,18 @@ export default function PaginaDetallePaquete() {
     } catch (error) {
       console.log("Error al compartir:", error);
     }
+  };
+
+  const handleReserva = () => {
+    if (!selectedFecha || !selectedPersonas) {
+      toast({
+        title: "Por favor selecciona todos los campos",
+        description: "Asegúrate de que has seleccionado una fecha y el número de personas.",
+      });
+      return;
+    }
+
+    // Proceder con la reserva
   };
 
   if (!paquete) {
@@ -215,34 +263,22 @@ export default function PaginaDetallePaquete() {
                 variant="secondary"
                 size="sm"
                 onClick={alternarFavorito}
-                className="
-               text-gray-700 border-0 bg-white/90
-               shadow-md active:scale-95
-               md:shadow-lg
-               transition-all duration-200
-               hover:bg-white hover:scale-105
-               focus-visible:ring-2 focus-visible:ring-amber-400
-             "
+                className="text-gray-700 border-0 bg-white/90 shadow-md active:scale-95 md:shadow-lg transition-all duration-200 hover:bg-white hover:scale-105 focus-visible:ring-2 focus-visible:ring-amber-400"
               >
                 <Heart
                   className={`h-5 w-5 transition-colors ${
-                    esFavorito ? "fill-red-500 text-red-500 animate-heartBeat" : ""
+                    esFavorito
+                      ? "fill-red-500 text-red-500 animate-heartBeat"
+                      : ""
                   }`}
-                />
-                {" "}Guardar
+                />{" "}
+                Guardar
               </Button>
 
               <Button
                 variant="secondary"
                 size="sm"
-                className="
-               text-gray-700 border-0 bg-white/90
-               shadow-md active:scale-95
-               md:shadow-lg
-               transition-all duration-200
-               hover:bg-white hover:scale-105
-               focus-visible:ring-2 focus-visible:ring-amber-400
-             "
+                className="text-gray-700 border-0 bg-white/90 shadow-md active:scale-95 md:shadow-lg transition-all duration-200 hover:bg-white hover:scale-105 focus-visible:ring-2 focus-visible:ring-amber-400"
                 onClick={compartir}
               >
                 <Share2 className="w-4 h-4 mr-2" />
@@ -261,258 +297,26 @@ export default function PaginaDetallePaquete() {
                 alt={paquete.nombre}
                 fill
                 className="object-cover w-full h-full transition-transform duration-300 rounded-lg hover:scale-105"
+                priority
               />
             </div>
-            {paquete.imagenes.slice(1, 5).map((imagen: string, index: number) => (
-              <div
-                key={index}
-                className="animate-fade-in-up relative"
-                style={{ animationDelay: `${300 + index * 100}ms` }}
-              >
-                <Image
-                  src={imagen || "/placeholder.svg"}
-                  alt={`${paquete.nombre} ${index + 2}`}
-                  className="object-cover w-full h-full transition-transform duration-300 rounded-lg hover:scale-105"
-                  width={600}
-                  height={400}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-          {/* Main Content */}
-          <div className="space-y-8 lg:col-span-2">
-            {/* Description */}
-            <Card className="transition-shadow duration-300 animate-fade-in-up animation-delay-300 hover:shadow-lg">
-              <CardContent className="p-6">
-                <h2 className="mb-4 text-xl font-bold font-heading text-primary">
-                  Sobre este paquete
-                </h2>
-                <div className="prose prose-gray max-w-none">
-                  {paquete.descripcionCompleta
-                    .split("\n\n")
-                    .map((parrafo: string, index: number) => (
-                      <p
-                        key={index}
-                        className="mb-4 leading-relaxed text-muted-foreground animate-fade-in-up"
-                        style={{ animationDelay: `${400 + index * 100}ms` }}
-                      >
-                        {parrafo}
-                      </p>
-                    ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Destinos incluidos */}
-            <Card className="transition-shadow duration-300 animate-fade-in-up animation-delay-400 hover:shadow-lg">
-              <CardContent className="p-6">
-                <h2 className="mb-4 text-xl font-bold font-heading text-primary">
-                  Destinos incluidos
-                </h2>
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  {paquete.destinos.map(
-                    (destino: Paquete["destinos"][number], index: number) => (
-                      <div
-                        key={index}
-                        className="p-4 transition-shadow border rounded-lg border-border hover:shadow-md animate-fade-in-up"
-                        style={{ animationDelay: `${500 + index * 100}ms` }}
-                      >
-                        <div className="flex items-start justify-between mb-2">
-                          <h3 className="font-semibold text-foreground">
-                            {destino.nombre}
-                          </h3>
-                          <Badge variant="secondary">{destino.dias} días</Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground">
-                          {destino.descripcion}
-                        </p>
-                      </div>
-                    )
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Itinerario */}
-            <Card className="transition-shadow duration-300 animate-fade-in-up animation-delay-500 hover:shadow-lg">
-              <CardContent className="p-6">
-                <h2 className="mb-4 text-xl font-bold font-heading text-primary">
-                  Itinerario detallado
-                </h2>
-                <div className="space-y-4">
-                  {paquete.itinerario.map(
-                    (dia: Paquete["itinerario"][number], index: number) => (
-                      <div
-                        key={index}
-                        className="pl-4 border-l-4 border-primary/20 animate-fade-in-up"
-                        style={{ animationDelay: `${600 + index * 50}ms` }}
-                      >
-                        <div className="flex items-center mb-2 space-x-2">
-                          <Badge className="bg-primary text-primary-foreground">
-                            Día {dia.dia}
-                          </Badge>
-                          <h3 className="font-semibold text-foreground">
-                            {dia.titulo}
-                          </h3>
-                        </div>
-                        <ul className="space-y-1">
-                          {dia.actividades.map(
-                            (actividad: string, actIndex: number) => (
-                              <li
-                                key={actIndex}
-                                className="flex items-center text-sm text-muted-foreground"
-                              >
-                                <CheckCircle className="flex-shrink-0 w-3 h-3 mr-2 text-green-500" />
-                                {actividad}
-                              </li>
-                            )
-                          )}
-                        </ul>
-                      </div>
-                    )
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* What's Included */}
-            <Card className="transition-shadow duration-300 animate-fade-in-up animation-delay-600 hover:shadow-lg">
-              <CardContent className="p-6">
-                <h2 className="mb-4 text-xl font-bold font-heading text-primary">
-                  Qué incluye
-                </h2>
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                  <div className="animate-slide-right">
-                    <h3 className="flex items-center mb-3 font-semibold text-green-700">
-                      <CheckCircle className="w-5 h-5 mr-2" />
-                      Incluido
-                    </h3>
-                    <ul className="space-y-2">
-                      {paquete.incluido.map((item: string, index: number) => (
-                        <li
-                          key={index}
-                          className="flex items-center text-sm text-muted-foreground animate-fade-in-up"
-                          style={{ animationDelay: `${700 + index * 50}ms` }}
-                        >
-                          <CheckCircle className="flex-shrink-0 w-4 h-4 mr-3 text-green-500" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="animate-slide-left">
-                    <h3 className="flex items-center mb-3 font-semibold text-red-700">
-                      <XCircle className="w-5 h-5 mr-2" />
-                      No incluido
-                    </h3>
-                    <ul className="space-y-2">
-                      {paquete.noIncluido.map((item: string, index: number) => (
-                        <li
-                          key={index}
-                          className="flex items-center text-sm text-muted-foreground animate-fade-in-up"
-                          style={{ animationDelay: `${800 + index * 50}ms` }}
-                        >
-                          <XCircle className="flex-shrink-0 w-4 h-4 mr-3 text-red-500" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Booking Card */}
-            <Card className="z-10 transition-all duration-300 border-2 lg:sticky lg:top-6 bg-white/95 backdrop-blur-sm animate-fade-in-up animation-delay-400 hover:shadow-xl border-primary/10">
-              <CardContent className="p-6">
-                <div className="mb-6 text-center">
-                  {paquete.precioOriginal && (
-                    <div className="mb-1 text-lg line-through text-muted-foreground">
-                      {paquete.precioOriginal}
-                    </div>
-                  )}
-                  <div className="mb-1 text-3xl font-black text-transparent font-heading text-primary bg-gradient-to-r from-primary to-accent bg-clip-text animate-pulse-gentle">
-                    {paquete.precio}
-                  </div>
-                  <div className="text-sm text-muted-foreground">por persona</div>
-                  {paquete.descuento && (
-                    <Badge className="mt-2 text-white bg-red-500">
-                      ¡Ahorra {paquete.descuento}%!
-                    </Badge>
-                  )}
-                </div>
-
-                <div className="mb-6 space-y-4">
-                  <div className="animate-slide-right">
-                    <label className="text-sm font-medium text-muted-foreground">
-                      Fecha de salida
-                    </label>
-                    <select className="w-full px-3 py-2 mt-1 transition-all duration-200 border rounded-lg border-border focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary">
-                      <option>Seleccionar fecha</option>
-                      {paquete.fechasDisponibles.map((fecha: string) => (
-                        <option key={fecha} value={fecha}>
-                          {new Date(fecha).toLocaleDateString("es-ES", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          })}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="animate-slide-left">
-                    <label className="text-sm font-medium text-muted-foreground">
-                      Número de personas
-                    </label>
-                    <select className="w-full px-3 py-2 mt-1 transition-all duration-200 border rounded-lg border-border focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary">
-                      <option>1 persona</option>
-                      <option>2 personas</option>
-                      <option>3 personas</option>
-                      <option>4 personas</option>
-                    </select>
-                  </div>
-                </div>
-
-                <Button
-                  className="w-full py-3 mb-3 font-semibold text-white transition-all duration-200 shadow-lg bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 hover:scale-105 hover:shadow-xl"
-                  onClick={() =>
-                    (window.location.href = `/reserva?paquete=${paquete.id}&nombre=${encodeURIComponent(
-                      paquete.nombre
-                    )}&precio=${encodeURIComponent(paquete.precio)}`)
-                  }
+            {paquete.imagenes
+              .slice(1, 5)
+              .map((imagen: string, index: number) => (
+                <div
+                  key={index}
+                  className="animate-fade-in-up relative"
+                  style={{ animationDelay: `${300 + index * 100}ms` }}
                 >
-                  <Calendar className="w-4 h-4 mr-2" />
-                  Reservar paquete
-                </Button>
-
-                <div className="text-xs text-center text-muted-foreground animate-fade-in-up animation-delay-600">
-                  Reserva con solo $100. Paga el resto 30 días antes del viaje.
+                  <Image
+                    src={imagen || "/placeholder.svg"}
+                    alt={`${paquete.nombre} ${index + 2}`}
+                    className="object-cover w-full h-full transition-transform duration-300 rounded-lg hover:scale-105"
+                    width={600}
+                    height={400}
+                  />
                 </div>
-              </CardContent>
-            </Card>
-
-            {/* Contact Card */}
-            <Card className="transition-shadow duration-300 animate-fade-in-up animation-delay-500 hover:shadow-lg">
-              <CardContent className="p-6 text-center">
-                <h3 className="mb-2 font-semibold">¿Necesitas ayuda?</h3>
-                <p className="mb-4 text-sm text-muted-foreground">
-                  Nuestros expertos están listos para ayudarte a planificar tu
-                  viaje perfecto.
-                </p>
-                <Button
-                  variant="outline"
-                  className="w-full transition-all duration-200 bg-transparent hover:scale-105"
-                >
-                  Contactar asesor
-                </Button>
-              </CardContent>
-            </Card>
+              ))}
           </div>
         </div>
       </div>

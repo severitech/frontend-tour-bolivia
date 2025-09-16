@@ -31,7 +31,8 @@ export function ItemListaDestino({
   precio,
   duracion,
   categoria,
-  maxPersonas,precioNumerico,duracionId
+  maxPersonas,
+  // precioNumerico,duracionId
 }: PropiedadesItemListaDestino) {
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-[1.02] animate-fade-in">
@@ -46,7 +47,7 @@ export function ItemListaDestino({
               objectFit="cover"
             />
             <div className="absolute px-2 py-1 text-xs font-semibold rounded top-3 left-3 bg-primary text-primary-foreground">
-              {categoria}
+              {categoria} 
             </div>
           </div>
 

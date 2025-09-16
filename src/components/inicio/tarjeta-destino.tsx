@@ -28,7 +28,7 @@ export function TarjetaDestino({
   imagen,
   precio,
   reseñas,
-  categoria,maxPersonas, precioNumerico,duracionId
+  // categoria,maxPersonas, precioNumerico,duracionId
 }: PropsTarjetaDestino) {
   const calificacionSegura = calificacion || 0;
   const calificacionRedondeada = Math.max(0, Math.min(5, calificacionSegura));
