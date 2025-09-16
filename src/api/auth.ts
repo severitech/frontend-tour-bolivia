@@ -90,10 +90,15 @@ export const listUsers = async () => {
 export const assignRole = async (id: string, rol: string) => {
   return api.post(`/usuarios/${id}/asignar-rol/`, { rol });
 };
-
-export const updateProfile = async (data: any) => {
+interface UpdateProfileData {
+  nombre: string;
+  email: string;
+  // Agrega más campos según sea necesario
+}
+export const updateProfile = async (data: UpdateProfileData) => {
   return api.put("/usuarios/me/", data);
 };
+
 
 export const requestPasswordRecovery = async (email: string) => {
   return api.post("/auth/solicitar-recuperacion/", { email });
