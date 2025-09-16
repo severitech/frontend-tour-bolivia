@@ -13,7 +13,7 @@ import { useState, useMemo } from "react"
 // Datos de ejemplo - en una app real vendría de una API
 const destinosEjemplo = [
   {
-    id: "salar-de-uyuni",
+    id: "salar-de-uyuni", 
     nombre: "Salar de Uyuni",
     ubicacion: "Potosí, Bolivia",
     descripcion:

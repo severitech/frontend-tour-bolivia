@@ -31,7 +31,7 @@ export function SeccionRecomendaciones({ recomendaciones }: PropsSeccionRecomend
               ubicacion={recomendacion.ubicacion}
               descripcion={recomendacion.descripcion}
               calificacion={recomendacion.calificacion}
-              Imagen={recomendacion.imagenUrl}
+              imagen={recomendacion.imagenUrl}
               precio={recomendacion.precio}
             />
           </div>

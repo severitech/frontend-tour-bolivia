@@ -10,7 +10,7 @@ interface PropsTarjetaDestino {
   ubicacion: string;
   descripcion: string;
   calificacion: number;
-  Imagen: string;
+  imagen: string;
   precio?: string;
   reseñas?: number;
   duracion?: string; // Nueva propiedad agregada
@@ -22,7 +22,7 @@ export function TarjetaDestino({
   ubicacion,
   descripcion,
   calificacion,
-  Imagen,
+  imagen,
   precio,
   reseñas
 }: PropsTarjetaDestino) {
@@ -34,7 +34,7 @@ export function TarjetaDestino({
       {/* Imagen */}
       <div className="relative h-64 overflow-hidden">
         <Image
-          src={Imagen || "/placeholder.svg?height=256&width=400&query=destino turístico boliviano"}
+          src={imagen || "/placeholder.svg?height=256&width=400&query=destino turístico boliviano"}
           alt={nombre}
           layout="fill"
           className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
