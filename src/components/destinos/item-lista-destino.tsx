@@ -11,11 +11,14 @@ interface PropiedadesItemListaDestino {
   ubicacion: string
   descripcion: string
   calificacion: number
-  urlImagen: string
+  imagen: string
   precio: string
   duracion: string
   categoria: string
   maxPersonas?: number
+  precioNumerico? : number
+  duracionId? : string
+  
 }
 
 export function ItemListaDestino({
@@ -24,11 +27,11 @@ export function ItemListaDestino({
   ubicacion,
   descripcion,
   calificacion,
-  urlImagen,
+  imagen,
   precio,
   duracion,
   categoria,
-  maxPersonas,
+  maxPersonas,precioNumerico,duracionId
 }: PropiedadesItemListaDestino) {
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-[1.02] animate-fade-in">
@@ -37,7 +40,7 @@ export function ItemListaDestino({
           {/* Image */}
           <div className="relative w-full h-48 overflow-hidden sm:w-80 sm:h-auto">
             <Image
-              src={urlImagen || "/placeholder.svg"}
+              src={imagen || "/placeholder.svg"}
               alt={nombre}
               layout="fill"
               objectFit="cover"

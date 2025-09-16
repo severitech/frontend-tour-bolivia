@@ -12,8 +12,11 @@ interface PropsTarjetaDestino {
   calificacion: number;
   imagen: string;
   precio?: string;
+  maxPersonas?:number;precioNumerico?: number
   reseñas?: number;
   duracion?: string; // Nueva propiedad agregada
+  categoria? :string
+  duracionId?: string
 }
 
 export function TarjetaDestino({
@@ -24,7 +27,8 @@ export function TarjetaDestino({
   calificacion,
   imagen,
   precio,
-  reseñas
+  reseñas,
+  categoria,maxPersonas, precioNumerico,duracionId
 }: PropsTarjetaDestino) {
   const calificacionSegura = calificacion || 0;
   const calificacionRedondeada = Math.max(0, Math.min(5, calificacionSegura));
